@@ -1,11 +1,54 @@
 const express = require("express");
 const router = express.Router();
 
-const { storagesController } = require("../controllers");
+const {
+  storagesController,
+  usersStoragesController,
+} = require("../controllers");
 
-const { validateRequestBody } = require("../middleware");
+const { validateRequestBody, validateRouteParam } = require("../middleware");
 
-const validateCreateStorage = validateRequestBody("create storage");
-router.post("/", validateCreateStorage, storagesController.create);
+const validateStorageBody = validateRequestBody("storage");
+const validateCreateUsersStoragesBody = validateRequestBody(
+  "create users storages"
+);
+const validateEditUsersStoragesBody = validateRequestBody(
+  "edit users storages"
+);
+const validateStorageId = validateRouteParam("storageId");
+const validateUserId = validateRouteParam("userId");
+
+// storages
+router.get("/", storagesController.get);
+router.post("/", validateStorageBody, storagesController.create);
+router.put(
+  "/:storageId",
+  validateStorageId,
+  validateStorageBody,
+  storagesController.edit
+);
+router.delete("/:storageId", validateStorageId, storagesController.remove);
+
+// users_storages
+router.get("/:storageId/users", validateStorageId, usersStoragesController.get);
+router.post(
+  "/:storageId/users",
+  validateStorageId,
+  validateCreateUsersStoragesBody,
+  usersStoragesController.create
+);
+router.put(
+  "/:storageId/users/:userId",
+  validateStorageId,
+  validateUserId,
+  validateEditUsersStoragesBody,
+  usersStoragesController.edit
+);
+router.delete(
+  "/:storageId/users/:userId",
+  validateStorageId,
+  validateUserId,
+  usersStoragesController.remove
+);
 
 module.exports = router;

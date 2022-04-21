@@ -29,7 +29,7 @@ const schemas = {
     labels: Joi.array().items(Joi.string().guid()).allow(null),
   }),
 
-  "create storage": Joi.object({
+  storage: Joi.object({
     storageName: Joi.string().required(),
     color: Joi.string()
       .valid(
@@ -51,6 +51,23 @@ const schemas = {
         "deepOrange"
       )
       .allow(null),
+  }),
+
+  "create users storages": Joi.object({
+    userId: Joi.string().uuid().empty(""),
+    userName: Joi.string().min(3).empty(""),
+    email: Joi.string().email().empty(""),
+    canShare: Joi.bool(),
+    canEdit: Joi.bool(),
+    canDelete: Joi.bool(),
+    canChangePermissions: Joi.bool(),
+  }),
+
+  "edit users storages": Joi.object({
+    canShare: Joi.bool(),
+    canEdit: Joi.bool(),
+    canDelete: Joi.bool(),
+    canChangePermissions: Joi.bool(),
   }),
 };
 

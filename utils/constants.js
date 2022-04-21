@@ -12,6 +12,7 @@ const constants = {
     somethingWentWrong: "something went wrong, try again later",
     invalid: "username, email or password invalid",
     invalidToken: "invalid token",
+    notFound: "resource not found",
   },
 };
 
