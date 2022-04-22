@@ -20,7 +20,7 @@ const schemas = {
     password: Joi.string().required().custom(validatePassword),
   }),
 
-  "create product": Joi.object({
+  product: Joi.object({
     productName: Joi.string().required(),
     expirationDate: Joi.string().regex(datePattern).allow(null),
     quantity: Joi.number().min(0).allow(null),

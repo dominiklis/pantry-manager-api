@@ -3,9 +3,19 @@ const router = express.Router();
 
 const { productsController } = require("../controllers");
 
-const { validateRequestBody } = require("../middleware");
+const { validateRequestBody, validateRouteParam } = require("../middleware");
 
-const validateCreateProduct = validateRequestBody("create product");
-router.post("/", validateCreateProduct, productsController.create);
+const validateProduct = validateRequestBody("product");
+const validateProductId = validateRouteParam("productId");
+
+router.get("/", productsController.get);
+router.post("/", validateProduct, productsController.create);
+router.put(
+  "/:productId",
+  validateProductId,
+  validateProduct,
+  productsController.edit
+);
+router.delete("/:productId", validateProductId, productsController.remove);
 
 module.exports = router;
