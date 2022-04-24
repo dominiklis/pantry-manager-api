@@ -1,5 +1,12 @@
 const pgPromise = require("pg-promise");
-const { Users, Products, Storages, UsersStorages } = require("./repos");
+const {
+  Users,
+  Products,
+  ProductsLabels,
+  Storages,
+  UsersStorages,
+  Labels,
+} = require("./repos");
 
 const camelizeColumns = (data) => {
   const tmp = data[0];
@@ -19,6 +26,8 @@ const initOptions = {
   extend(obj, dc) {
     obj.users = new Users(obj, pgp);
     obj.products = new Products(obj, pgp);
+    obj.labels = new Labels(obj, pgp);
+    obj.productsLabels = new ProductsLabels(obj, pgp);
     obj.storages = new Storages(obj, pgp);
     obj.usersStorages = new UsersStorages(obj, pgp);
   },

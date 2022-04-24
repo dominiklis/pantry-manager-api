@@ -29,6 +29,10 @@ const schemas = {
     labels: Joi.array().items(Joi.string().guid()).allow(null),
   }),
 
+  label: Joi.object({
+    labelName: Joi.string().required(),
+  }),
+
   storage: Joi.object({
     storageName: Joi.string().required(),
     color: Joi.string()
@@ -62,7 +66,6 @@ const schemas = {
     canDelete: Joi.bool(),
     canChangePermissions: Joi.bool(),
   }),
-
   "edit users storages": Joi.object({
     canShare: Joi.bool(),
     canEdit: Joi.bool(),

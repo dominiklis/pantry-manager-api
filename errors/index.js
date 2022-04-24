@@ -5,6 +5,7 @@ const SomethingWentWrong = require("./SomethingWentWrong");
 const InvalidToken = require("./InvalidToken");
 const InvalidId = require("./InvalidId");
 const Forbidden = require("./Forbidden");
+const Duplicate = require("./Duplicate");
 
 module.exports = {
   ApiError,
@@ -14,4 +15,5 @@ module.exports = {
   InvalidToken,
   InvalidId,
   Forbidden,
+  Duplicate,
 };
