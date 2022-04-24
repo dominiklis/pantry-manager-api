@@ -19,7 +19,8 @@ const get = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { userId } = req.user;
-  const { productName, expirationDate, quantity, unit, storageId } = req.body;
+  const { productName, expirationDate, quantity, unit, storageId, labels } =
+    req.body;
 
   try {
     const result = await createProduct(
@@ -28,7 +29,8 @@ const create = async (req, res, next) => {
       expirationDate,
       quantity,
       unit,
-      storageId
+      storageId,
+      labels
     );
 
     return res.status(201).json(result);
@@ -40,7 +42,8 @@ const create = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId } = req.user;
   const { productId } = req.params;
-  const { productName, expirationDate, quantity, unit, storageId } = req.body;
+  const { productName, expirationDate, quantity, unit, storageId, labels } =
+    req.body;
 
   try {
     const result = await editProduct(
@@ -50,7 +53,8 @@ const edit = async (req, res, next) => {
       expirationDate,
       quantity,
       unit,
-      storageId
+      storageId,
+      labels
     );
 
     return res.status(200).json(result);

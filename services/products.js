@@ -1,6 +1,38 @@
 const { db } = require("../db");
 const { SomethingWentWrong, BadRequest } = require("../errors");
 
+const createProductsLabelsRelations = async (
+  task,
+  labels,
+  productId,
+  userId
+) => {
+  const result = [];
+
+  for (const labelId of labels) {
+    try {
+      const label = await task.labels.findById(labelId);
+      if (label && label.ownerId === userId) {
+        const insertingResult = await task.productsLabels.create(
+          productId,
+          labelId
+        );
+        if (insertingResult) result.push(labelId);
+      }
+    } catch (error) {
+      console.log(error);
+
+      continue;
+    }
+  }
+
+  return result;
+};
+
+const removeProductsLabelsRelations = async (task, productId) => {
+  await task.productsLabels.removeForProduct(productId);
+};
+
 const getProducts = async (userId) => {
   try {
     const results = await db.products.get(userId);
@@ -17,20 +49,34 @@ const createProduct = async (
   expirationDate,
   quantity,
   unit,
-  storageId
+  storageId,
+  labels
 ) => {
   try {
-    const createdProduct = await db.products.create(
-      userId,
-      productName,
-      expirationDate,
-      quantity,
-      unit,
-      storageId
-    );
-    if (!createdProduct) throw new SomethingWentWrong();
+    const result = await db.task(async (t) => {
+      const createdProduct = await db.products.create(
+        userId,
+        productName,
+        expirationDate,
+        quantity,
+        unit,
+        storageId
+      );
+      if (!createdProduct) throw new SomethingWentWrong();
 
-    return createdProduct;
+      if (labels && labels.length) {
+        labels = await createProductsLabelsRelations(
+          t,
+          labels,
+          createdProduct.productId,
+          userId
+        );
+      }
+
+      return { ...createdProduct, labels: labels ?? [] };
+    });
+
+    return result;
   } catch (error) {
     throw error;
   }
@@ -43,7 +89,8 @@ const editProduct = async (
   expirationDate,
   quantity,
   unit,
-  storageId
+  storageId,
+  labels
 ) => {
   try {
     const result = await db.task(async (t) => {
@@ -60,7 +107,18 @@ const editProduct = async (
       );
       if (!editedProduct) throw new SomethingWentWrong();
 
-      return editedProduct;
+      await removeProductsLabelsRelations(t, productId);
+
+      if (labels && labels.length) {
+        labels = await createProductsLabelsRelations(
+          t,
+          labels,
+          editedProduct.productId,
+          userId
+        );
+      }
+
+      return { editedProduct, labels: labels ?? [] };
     });
 
     return result;
