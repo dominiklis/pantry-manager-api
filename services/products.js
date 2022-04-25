@@ -54,6 +54,12 @@ const createProduct = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
+      if (storageId) {
+        const userRelation = await t.usersStorages.findById(userId, storageId);
+
+        if (!userRelation) throw new BadRequest();
+      }
+
       const createdProduct = await t.products.create(
         userId,
         productName,
@@ -97,6 +103,16 @@ const editProduct = async (
       const productToEdit = await t.products.findById(userId, productId);
       if (!productToEdit) throw new BadRequest();
 
+      if (productToEdit.ownerId !== userId) {
+        if (productToEdit.storageId) {
+          const userRelation = await t.usersStorages.findById(
+            userId,
+            productToEdit.storageId
+          );
+          if (!userRelation) throw new BadRequest();
+        } else throw new BadRequest();
+      }
+
       const editedProduct = await t.products.edit(
         productId,
         productName,
@@ -132,6 +148,16 @@ const removeProduct = async (userId, productId) => {
     const result = await db.task(async (t) => {
       const productToRemove = await t.products.findById(userId, productId);
       if (!productToRemove) throw new BadRequest();
+
+      if (productToRemove.ownerId !== userId) {
+        if (productToRemove.storageId) {
+          const userRelation = await t.usersStorages.findById(
+            userId,
+            productToRemove.storageId
+          );
+          if (!userRelation) throw new BadRequest();
+        } else throw new BadRequest();
+      }
 
       const removedProduct = await t.products.remove(productId);
       if (!removedProduct) throw new SomethingWentWrong();
