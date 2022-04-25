@@ -21,7 +21,7 @@ const schemas = {
   }),
 
   product: Joi.object({
-    productName: Joi.string().required(),
+    productName: Joi.string().min(1).required(),
     expirationDate: Joi.string().regex(datePattern).allow(null),
     quantity: Joi.number().min(0).allow(null),
     unit: Joi.string().allow(null, ""),
@@ -76,6 +76,13 @@ const schemas = {
     canEdit: Joi.bool(),
     canDelete: Joi.bool(),
     canChangePermissions: Joi.bool(),
+  }),
+
+  "shopping list item": Joi.object({
+    shoppingListItemName: Joi.string().min(1).required(),
+    shoppingListId: Joi.string().guid().allow(null),
+    quantity: Joi.string().allow(null, ""),
+    selected: Joi.boolean().allow(null),
   }),
 };
 

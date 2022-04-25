@@ -30,6 +30,12 @@ const {
   editUsersShoppingLists,
   deleteUsersShoppingLists,
 } = require("./usersShoppingLists");
+const {
+  getShoppingListItems,
+  createShoppingListItem,
+  editShoppingListItem,
+  removeShoppingListItem,
+} = require("./shoppingListsItems");
 
 module.exports = {
   loginUser,
@@ -65,4 +71,9 @@ module.exports = {
   createUsersShoppingLists,
   editUsersShoppingLists,
   deleteUsersShoppingLists,
+
+  getShoppingListItems,
+  createShoppingListItem,
+  editShoppingListItem,
+  removeShoppingListItem,
 };

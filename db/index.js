@@ -8,6 +8,7 @@ const {
   Labels,
   ShoppingLists,
   UsersShoppingLists,
+  ShoppingListsItems,
 } = require("./repos");
 
 const camelizeColumns = (data) => {
@@ -34,6 +35,7 @@ const initOptions = {
     obj.usersStorages = new UsersStorages(obj, pgp);
     obj.shoppingLists = new ShoppingLists(obj, pgp);
     obj.usersShoppingLists = new UsersShoppingLists(obj, pgp);
+    obj.shoppingListItems = new ShoppingListsItems(obj, pgp);
   },
 
   receive(data, result, e) {

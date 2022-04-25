@@ -6,7 +6,7 @@ class ProductsRepository {
 
   async findById(userId, productId) {
     return this.db.oneOrNone(
-      `SELECT pd.* FROM  products pd
+      `SELECT DISTINCT pd.* FROM  products pd
         LEFT JOIN users_storages ust ON pd.storage_id=ust.storage_id
           WHERE pd.product_id=$2 AND (pd.owner_id=$1 OR ust.user_id=$1)`,
       [userId, productId]
@@ -15,7 +15,7 @@ class ProductsRepository {
 
   async get(userId) {
     return this.db.manyOrNone(
-      `SELECT DISTINCT pd.*, selected_labels.labels FROM  products pd
+      `SELECT DISTINCT pd.*, selected_labels.labels FROM products pd
         LEFT JOIN users_storages ust ON pd.storage_id=ust.storage_id
         LEFT JOIN (
           SELECT lbls.product_id, ARRAY_AGG(lbls.label_id) AS labels FROM (

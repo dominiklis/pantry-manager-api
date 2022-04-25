@@ -7,4 +7,5 @@ module.exports = {
   UsersStorages: require("./usersStorages"),
   ShoppingLists: require("./shoppingLists"),
   UsersShoppingLists: require("./usersShoppingLists"),
+  ShoppingListsItems: require("./shoppingListsItems"),
 };

@@ -5,6 +5,7 @@ const storagesController = require("./storages");
 const usersStoragesController = require("./usersStorages");
 const shoppingListsController = require("./shoppingLists");
 const usersShoppingListsController = require("./usersShoppingLists");
+const shoppingListsItemsController = require("./shoppingListsItems");
 
 module.exports = {
   usersController,
@@ -14,4 +15,5 @@ module.exports = {
   usersStoragesController,
   shoppingListsController,
   usersShoppingListsController,
+  shoppingListsItemsController,
 };
