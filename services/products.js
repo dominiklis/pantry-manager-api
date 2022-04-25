@@ -54,7 +54,7 @@ const createProduct = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
-      const createdProduct = await db.products.create(
+      const createdProduct = await t.products.create(
         userId,
         productName,
         expirationDate,
