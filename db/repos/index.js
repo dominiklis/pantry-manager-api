@@ -5,4 +5,6 @@ module.exports = {
   ProductsLabels: require("./productsLabels"),
   Storages: require("./storages"),
   UsersStorages: require("./usersStorages"),
+  ShoppingLists: require("./shoppingLists"),
+  UsersShoppingLists: require("./usersShoppingLists"),
 };

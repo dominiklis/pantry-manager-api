@@ -3,6 +3,8 @@ const productsController = require("./products");
 const labelsController = require("./labels");
 const storagesController = require("./storages");
 const usersStoragesController = require("./usersStorages");
+const shoppingListsController = require("./shoppingLists");
+const usersShoppingListsController = require("./usersShoppingLists");
 
 module.exports = {
   usersController,
@@ -10,4 +12,6 @@ module.exports = {
   labelsController,
   storagesController,
   usersStoragesController,
+  shoppingListsController,
+  usersShoppingListsController,
 };

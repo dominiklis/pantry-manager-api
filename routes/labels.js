@@ -1,6 +1,7 @@
 const express = require("express");
-const { labelsController } = require("../controllers");
 const router = express.Router();
+
+const { labelsController } = require("../controllers");
 
 const { validateRequestBody, validateRouteParam } = require("../middleware");
 

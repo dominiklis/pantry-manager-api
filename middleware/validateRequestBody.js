@@ -30,11 +30,11 @@ const schemas = {
   }),
 
   label: Joi.object({
-    labelName: Joi.string().required(),
+    labelName: Joi.string().min(1).required(),
   }),
 
   storage: Joi.object({
-    storageName: Joi.string().required(),
+    storageName: Joi.string().min(1).required(),
     color: Joi.string()
       .valid(
         "red",
@@ -57,7 +57,11 @@ const schemas = {
       .allow(null),
   }),
 
-  "create users storages": Joi.object({
+  "shopping list": Joi.object({
+    shoppingListName: Joi.string().min(1).required(),
+  }),
+
+  "create users sharing": Joi.object({
     userId: Joi.string().uuid().empty(""),
     userName: Joi.string().min(3).empty(""),
     email: Joi.string().email().empty(""),
@@ -66,7 +70,8 @@ const schemas = {
     canDelete: Joi.bool(),
     canChangePermissions: Joi.bool(),
   }),
-  "edit users storages": Joi.object({
+
+  "edit users sharing": Joi.object({
     canShare: Joi.bool(),
     canEdit: Joi.bool(),
     canDelete: Joi.bool(),

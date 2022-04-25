@@ -10,11 +10,10 @@ const { validateRequestBody, validateRouteParam } = require("../middleware");
 
 const validateStorageBody = validateRequestBody("storage");
 const validateCreateUsersStoragesBody = validateRequestBody(
-  "create users storages"
+  "create users sharing"
 );
-const validateEditUsersStoragesBody = validateRequestBody(
-  "edit users storages"
-);
+const validateEditUsersStoragesBody = validateRequestBody("edit users sharing");
+
 const validateStorageId = validateRouteParam("storageId");
 const validateUserId = validateRouteParam("userId");
 
@@ -29,7 +28,7 @@ router.put(
 );
 router.delete("/:storageId", validateStorageId, storagesController.remove);
 
-// users_storages
+// users storages
 router.get("/:storageId/users", validateStorageId, usersStoragesController.get);
 router.post(
   "/:storageId/users",
