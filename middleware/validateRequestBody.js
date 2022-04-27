@@ -52,9 +52,10 @@ const schemas = {
         "yellow",
         "amber",
         "orange",
-        "deepOrange"
+        "deepOrange",
+        "white"
       )
-      .allow(null),
+      .required(),
   }),
 
   "shopping list": Joi.object({
