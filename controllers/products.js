@@ -19,7 +19,7 @@ const get = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { userId } = req.user;
-  const { productName, expirationDate, quantity, unit, storageId, labels } =
+  const { productName, expirationDate, amount, unit, storageId, labels } =
     req.body;
 
   try {
@@ -27,7 +27,7 @@ const create = async (req, res, next) => {
       userId,
       productName,
       expirationDate,
-      quantity,
+      amount,
       unit,
       storageId,
       labels
@@ -42,7 +42,7 @@ const create = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId } = req.user;
   const { productId } = req.params;
-  const { productName, expirationDate, quantity, unit, storageId, labels } =
+  const { productName, expirationDate, amount, unit, storageId, labels } =
     req.body;
 
   try {
@@ -51,7 +51,7 @@ const edit = async (req, res, next) => {
       productId,
       productName,
       expirationDate,
-      quantity,
+      amount,
       unit,
       storageId,
       labels

@@ -47,7 +47,7 @@ const createProduct = async (
   userId,
   productName,
   expirationDate,
-  quantity,
+  amount,
   unit,
   storageId,
   labels
@@ -64,7 +64,7 @@ const createProduct = async (
         userId,
         productName,
         expirationDate,
-        quantity,
+        amount,
         unit,
         storageId
       );
@@ -93,7 +93,7 @@ const editProduct = async (
   productId,
   productName,
   expirationDate,
-  quantity,
+  amount,
   unit,
   storageId,
   labels
@@ -117,7 +117,7 @@ const editProduct = async (
         productId,
         productName,
         expirationDate,
-        quantity,
+        amount,
         unit,
         storageId
       );
