@@ -56,6 +56,13 @@ class ProductsRepository {
       [productId]
     );
   }
+
+  async removeWithStorageId(storageId) {
+    return this.db.manyOrNone(
+      `DELETE FROM products WHERE storage_id=$1 RETURNING *`,
+      [storageId]
+    );
+  }
 }
 
 module.exports = ProductsRepository;

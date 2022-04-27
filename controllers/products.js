@@ -3,6 +3,7 @@ const {
   createProduct,
   editProduct,
   removeProduct,
+  removeProductsInStorage,
 } = require("../services");
 
 const get = async (req, res, next) => {
@@ -76,9 +77,23 @@ const remove = async (req, res, next) => {
   }
 };
 
+const removeInStorage = async (req, res, next) => {
+  const { userId } = req.user;
+  const { storageId } = req.params;
+
+  try {
+    const result = await removeProductsInStorage(userId, storageId);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   get,
   create,
   edit,
   remove,
+  removeInStorage,
 };

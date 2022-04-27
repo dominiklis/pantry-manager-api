@@ -171,9 +171,35 @@ const removeProduct = async (userId, productId) => {
   }
 };
 
+const removeProductsInStorage = async (userId, storageId) => {
+  try {
+    const result = await db.task(async (t) => {
+      const deletedProducts = [];
+
+      const storageToRemove = await t.storages.findById(storageId);
+      if (storageToRemove) {
+        if (storageToRemove.ownerId !== userId) {
+          const relation = await t.usersStorages.findById(userId, storageId);
+
+          if (!relation || !relation.canDelete) throw new Forbidden();
+        }
+      }
+
+      const removedProducts = await t.products.removeWithStorageId(storageId);
+
+      return removedProducts;
+    });
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getProducts,
   createProduct,
   editProduct,
   removeProduct,
+  removeProductsInStorage,
 };
