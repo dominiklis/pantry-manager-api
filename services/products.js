@@ -134,7 +134,7 @@ const editProduct = async (
         );
       }
 
-      return { editedProduct, labels: labels ?? [] };
+      return { ...editedProduct, labels: labels ?? [] };
     });
 
     return result;
