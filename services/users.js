@@ -27,7 +27,7 @@ const loginUser = async (userName, email, password) => {
       const products = await t.products.get(user.userId);
       const labels = await t.labels.get(user.userId);
       const shoppingLists = await t.shoppingLists.get(user.userId);
-      const shoppingListsItems = await t.shoppingListItems.get(user.userId);
+      const shoppingListItems = await t.shoppingListItems.get(user.userId);
 
       return {
         userId: user.userId,
@@ -38,7 +38,7 @@ const loginUser = async (userName, email, password) => {
         products,
         labels,
         shoppingLists,
-        shoppingListsItems,
+        shoppingListItems,
       };
     });
 
@@ -65,7 +65,7 @@ const registerUser = async (userName, email, password) => {
         products: [],
         labels: [],
         shoppingLists: [],
-        shoppingListsItems: [],
+        shoppingListItems: [],
       };
     });
 
@@ -95,7 +95,7 @@ const renewToken = async (userId, userName, email) => {
     const products = await t.products.get(user.userId);
     const labels = await t.labels.get(user.userId);
     const shoppingLists = await t.shoppingLists.get(user.userId);
-    const shoppingListsItems = await t.shoppingListItems.get(user.userId);
+    const shoppingListItems = await t.shoppingListItems.get(user.userId);
 
     return {
       userId,
@@ -106,7 +106,7 @@ const renewToken = async (userId, userName, email) => {
       products,
       labels,
       shoppingLists,
-      shoppingListsItems,
+      shoppingListItems,
     };
   });
 
