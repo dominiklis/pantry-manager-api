@@ -1,9 +1,11 @@
 const ApiError = require("./ApiError");
 
 class Duplicate extends ApiError {
-  constructor(resource, propertyName) {
+  constructor(resourceOrSingleMessage, propertyName) {
     super(
-      `duplicate, ${resource} with this ${propertyName} already exists`,
+      propertyName
+        ? `duplicate, ${resource} with this ${propertyName} already exists`
+        : resourceOrSingleMessage,
       400
     );
   }
