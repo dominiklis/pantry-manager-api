@@ -22,7 +22,7 @@ const create = async (req, res, next) => {
   const {
     shoppingListItemName,
     quantity,
-    selected = true,
+    selected = false,
     shoppingListId,
   } = req.body;
 
