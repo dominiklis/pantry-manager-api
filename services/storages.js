@@ -12,7 +12,7 @@ const getStorages = async (userId) => {
   }
 };
 
-const createStorage = async (userId, storageName, color) => {
+const createStorage = async (userId, userName, storageName, color) => {
   try {
     const result = await db.task(async (t) => {
       const createdStorage = await t.storages.create(
@@ -22,7 +22,7 @@ const createStorage = async (userId, storageName, color) => {
       );
       if (!createdStorage) throw new SomethingWentWrong();
 
-      await t.usersStorages.create(
+      const usersStorages = await t.usersStorages.create(
         userId,
         createdStorage.storageId,
         true,
@@ -31,7 +31,11 @@ const createStorage = async (userId, storageName, color) => {
         true
       );
 
-      return createdStorage;
+      return {
+        ...createdStorage,
+        ...usersStorages,
+        users: [{ userName, ...usersStorages }],
+      };
     });
 
     return result;

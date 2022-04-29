@@ -1,5 +1,10 @@
 const { db } = require("../db");
-const { SomethingWentWrong, BadRequest, Forbidden } = require("../errors");
+const {
+  SomethingWentWrong,
+  BadRequest,
+  Forbidden,
+  Duplicate,
+} = require("../errors");
 
 const getUsersStorages = async (userId, storageId) => {
   try {
@@ -55,11 +60,16 @@ const createUsersStorages = async (
       );
       if (!createdRelation) throw new SomethingWentWrong();
 
-      return createdRelation;
+      const user = await t.users.findById(createdRelation.userId);
+
+      return { ...createdRelation, userName: user.userName };
     });
 
     return result;
   } catch (error) {
+    if (error?.code === "23505")
+      throw new Duplicate("user alread has an access to this storage");
+
     throw error;
   }
 };

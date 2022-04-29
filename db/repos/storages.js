@@ -16,11 +16,27 @@ class StoragesRepository {
     return this.db.manyOrNone(
       `SELECT st.*,
         can_share, can_edit, can_delete, can_change_permissions,
-          user_name owner_name
-            FROM users_storages ust
-              LEFT JOIN storages st ON st.storage_id=ust.storage_id
-                LEFT JOIN users us ON us.user_id=ust.user_id
-                  WHERE us.user_id=$1`,
+        user_name owner_name,
+        users_for_storage.users
+          FROM users_storages ust
+            LEFT JOIN storages st ON st.storage_id=ust.storage_id
+            LEFT JOIN users us ON us.user_id=ust.user_id
+            LEFT JOIN (
+              SELECT TEST_USERS.storage_id, JSON_AGG(TEST_USERS.*) users FROM (
+                SELECT 
+                  st.storage_id, 
+                  ust.user_id,
+                  ust.can_share,
+                  ust.can_edit,
+                  ust.can_delete,
+                  ust.can_change_permissions,
+                  us.user_name
+                    FROM storages st
+                      LEFT JOIN users_storages ust ON st.storage_id=ust.storage_id
+                      LEFT JOIN users us ON ust.user_id = us.user_id
+              ) TEST_USERS GROUP BY TEST_USERS.storage_id
+            ) users_for_storage ON users_for_storage.storage_id=ust.storage_id
+          WHERE us.user_id=$1`,
       [userId]
     );
   }

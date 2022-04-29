@@ -18,11 +18,11 @@ const get = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, userName } = req.user;
   const { storageName, color } = req.body;
 
   try {
-    const result = await createStorage(userId, storageName, color);
+    const result = await createStorage(userId, userName, storageName, color);
 
     res.status(201).json(result);
   } catch (error) {
