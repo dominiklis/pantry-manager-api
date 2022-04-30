@@ -18,6 +18,8 @@ const validateEditUsersShoppingListsBody =
 const validateShoppingListId = validateRouteParam("shoppingListId");
 const validateUserId = validateRouteParam("userId");
 
+const validateParams = validateRouteParam("delete items");
+
 // shopping lists
 router.get("/", shoppingListsController.get);
 router.post("/", validateShoppingListBody, shoppingListsController.create);
@@ -56,6 +58,7 @@ router.delete(
   "/:shoppingListId/users/:userId",
   validateShoppingListId,
   validateUserId,
+  validateParams,
   usersShoppingListsController.remove
 );
 

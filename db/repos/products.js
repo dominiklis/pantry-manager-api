@@ -57,11 +57,10 @@ class ProductsRepository {
     );
   }
 
-  async removeWithStorageId(storageId) {
-    return this.db.manyOrNone(
-      `DELETE FROM products WHERE storage_id=$1 RETURNING *`,
-      [storageId]
-    );
+  async removeProductsInStorage(storageId) {
+    return this.db.none(`DELETE FROM products WHERE storage_id=$1`, [
+      storageId,
+    ]);
   }
 }
 

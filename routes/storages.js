@@ -17,6 +17,8 @@ const validateEditUsersStoragesBody = validateRequestBody("edit users sharing");
 const validateStorageId = validateRouteParam("storageId");
 const validateUserId = validateRouteParam("userId");
 
+const validateParams = validateRouteParam("delete products");
+
 // storages
 router.get("/", storagesController.get);
 router.post("/", validateStorageBody, storagesController.create);
@@ -47,6 +49,7 @@ router.delete(
   "/:storageId/users/:userId",
   validateStorageId,
   validateUserId,
+  validateParams,
   usersStoragesController.remove
 );
 

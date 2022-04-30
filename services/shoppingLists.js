@@ -59,12 +59,15 @@ const editShoppingList = async (userId, shoppingListId, shoppingListName) => {
   }
 };
 
-const removeShoppingList = async (userId, shoppingListId) => {
+const removeShoppingList = async (userId, shoppingListId, deleteItems) => {
   try {
     const result = await db.task(async (t) => {
       const listToRemove = await db.shoppingLists.findById(shoppingListId);
       if (!listToRemove || listToRemove.ownerId !== userId)
         throw new BadRequest();
+
+      if (deleteItems === "true")
+        await db.shoppingListItems.removeItemsOnList(shoppingListId);
 
       const removedList = await t.shoppingLists.remove(shoppingListId);
       if (!removedList) throw new SomethingWentWrong();

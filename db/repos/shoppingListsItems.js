@@ -68,6 +68,13 @@ class ShoppingListsItemsRepository {
       [shoppingListItemId]
     );
   }
+
+  async removeItemsOnList(shoppingListId) {
+    return this.db.none(
+      `DELETE FROM shopping_list_items WHERE shopping_list_id=$1;`,
+      [shoppingListId]
+    );
+  }
 }
 
 module.exports = ShoppingListsItemsRepository;

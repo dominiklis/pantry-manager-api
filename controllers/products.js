@@ -3,7 +3,6 @@ const {
   createProduct,
   editProduct,
   removeProduct,
-  removeProductsInStorage,
 } = require("../services");
 
 const get = async (req, res, next) => {
@@ -67,22 +66,10 @@ const edit = async (req, res, next) => {
 const remove = async (req, res, next) => {
   const { userId } = req.user;
   const { productId } = req.params;
+  const { deleteProducts } = req.query;
 
   try {
-    const result = await removeProduct(userId, productId);
-
-    return res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const removeInStorage = async (req, res, next) => {
-  const { userId } = req.user;
-  const { storageId } = req.params;
-
-  try {
-    const result = await removeProductsInStorage(userId, storageId);
+    const result = await removeProduct(userId, productId, deleteProducts);
 
     return res.status(200).json(result);
   } catch (error) {
@@ -95,5 +82,4 @@ module.exports = {
   create,
   edit,
   remove,
-  removeInStorage,
 };

@@ -51,9 +51,14 @@ const edit = async (req, res, next) => {
 const remove = async (req, res, next) => {
   const { userId } = req.user;
   const { shoppingListId } = req.params;
+  const { deleteItems } = req.query;
 
   try {
-    const result = await removeShoppingList(userId, shoppingListId);
+    const result = await removeShoppingList(
+      userId,
+      shoppingListId,
+      deleteItems
+    );
 
     return res.status(200).json(result);
   } catch (error) {

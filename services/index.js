@@ -4,14 +4,13 @@ const {
   editProduct,
   createProduct,
   removeProduct,
-  removeProductsInStorage,
 } = require("./products");
 const { getLabels, createLabel, editLabel, removeLabel } = require("./labels");
 const {
   getStorages,
   createStorage,
   editStorage,
-  deleteStorage,
+  removeStorage,
 } = require("./storages");
 const {
   getUsersStorages,
@@ -47,7 +46,6 @@ module.exports = {
   createProduct,
   editProduct,
   removeProduct,
-  removeProductsInStorage,
 
   getLabels,
   createLabel,
@@ -57,7 +55,7 @@ module.exports = {
   getStorages,
   createStorage,
   editStorage,
-  deleteStorage,
+  removeStorage,
 
   getUsersStorages,
   createUsersStorages,

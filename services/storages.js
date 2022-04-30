@@ -73,7 +73,7 @@ const editStorage = async (userId, storageId, storageName, color) => {
   }
 };
 
-const deleteStorage = async (userId, storageId) => {
+const removeStorage = async (userId, storageId, deleteProducts) => {
   try {
     const result = await db.task(async (t) => {
       const storageToRemove = await t.storages.findById(storageId);
@@ -85,6 +85,9 @@ const deleteStorage = async (userId, storageId) => {
 
         if (!relation || !relation.canDelete) throw new Forbidden();
       }
+
+      if (deleteProducts === "true")
+        await db.products.removeProductsInStorage(storageId);
 
       const removedStorage = await t.storages.remove(storageId);
       if (!removedStorage) throw new SomethingWentWrong();
@@ -102,5 +105,5 @@ module.exports = {
   getStorages,
   createStorage,
   editStorage,
-  deleteStorage,
+  removeStorage,
 };

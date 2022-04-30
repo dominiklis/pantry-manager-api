@@ -18,10 +18,5 @@ router.put(
   productsController.edit
 );
 router.delete("/:productId", validateProductId, productsController.remove);
-router.delete(
-  "/remove-in-storage/:storageId",
-  validateStorageId,
-  productsController.removeInStorage
-);
 
 module.exports = router;

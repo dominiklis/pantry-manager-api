@@ -2,7 +2,7 @@ const {
   getStorages,
   createStorage,
   editStorage,
-  deleteStorage,
+  removeStorage,
 } = require("../services");
 
 const get = async (req, res, next) => {
@@ -47,9 +47,10 @@ const edit = async (req, res, next) => {
 const remove = async (req, res, next) => {
   const { userId } = req.user;
   const { storageId } = req.params;
+  const { deleteProducts } = req.query;
 
   try {
-    const result = await deleteStorage(userId, storageId);
+    const result = await removeStorage(userId, storageId, deleteProducts);
 
     res.status(200).json(result);
   } catch (error) {
