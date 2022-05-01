@@ -22,7 +22,7 @@ class StoragesRepository {
             LEFT JOIN storages st ON st.storage_id=ust.storage_id
             LEFT JOIN users us ON us.user_id=ust.user_id
             LEFT JOIN (
-              SELECT TEST_USERS.storage_id, JSON_AGG(TEST_USERS.*) users FROM (
+              SELECT stor_usr.storage_id, JSON_AGG(stor_usr.*) users FROM (
                 SELECT 
                   st.storage_id, 
                   ust.user_id,
@@ -34,7 +34,7 @@ class StoragesRepository {
                     FROM storages st
                       LEFT JOIN users_storages ust ON st.storage_id=ust.storage_id
                       LEFT JOIN users us ON ust.user_id = us.user_id
-              ) TEST_USERS GROUP BY TEST_USERS.storage_id
+              ) stor_usr GROUP BY stor_usr.storage_id
             ) users_for_storage ON users_for_storage.storage_id=ust.storage_id
           WHERE us.user_id=$1`,
       [userId]

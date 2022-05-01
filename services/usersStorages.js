@@ -5,6 +5,7 @@ const {
   Forbidden,
   Duplicate,
 } = require("../errors");
+const constants = require("../utils/constants");
 
 const getUsersStorages = async (userId, storageId) => {
   try {
@@ -45,7 +46,8 @@ const createUsersStorages = async (
 
       if (!userId) {
         const user = await t.users.findByUserNameOrEmail(userName, email);
-        if (!user) throw new BadRequest();
+        if (!user)
+          throw new BadRequest(constants.errorsMessages.thisUserDoesNotExist);
 
         userId = user.userId;
       }

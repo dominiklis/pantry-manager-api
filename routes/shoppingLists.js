@@ -32,6 +32,7 @@ router.put(
 router.delete(
   "/:shoppingListId",
   validateShoppingListId,
+  validateParams,
   shoppingListsController.remove
 );
 
@@ -58,7 +59,6 @@ router.delete(
   "/:shoppingListId/users/:userId",
   validateShoppingListId,
   validateUserId,
-  validateParams,
   usersShoppingListsController.remove
 );
 

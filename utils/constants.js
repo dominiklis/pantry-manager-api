@@ -13,6 +13,7 @@ const constants = {
     invalid: "username, email or password invalid",
     invalidToken: "invalid token",
     notFound: "resource not found",
+    thisUserDoesNotExist: "this user does not exist",
   },
 };
 

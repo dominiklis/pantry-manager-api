@@ -13,7 +13,29 @@ class ShoppingListsRepository {
 
   async get(userId) {
     return this.db.manyOrNone(
-      `SELECT * FROM shopping_lists WHERE owner_id=$1`,
+      `SELECT sl.*,
+        can_share, can_edit, can_delete, can_change_permissions,
+        user_name owner_name,
+        users_for_list.users
+          FROM users_shopping_lists usl
+            LEFT JOIN shopping_lists sl ON sl.shopping_list_id=usl.shopping_list_id
+            LEFT JOIN users us ON us.user_id=usl.user_id
+            LEFT JOIN (
+              SELECT list_usr.shopping_list_id, JSON_AGG(list_usr.*) users FROM (
+                SELECT 
+                  sl.shopping_list_id, 
+                  usl.user_id,
+                  usl.can_share,
+                  usl.can_edit,
+                  usl.can_delete,
+                  usl.can_change_permissions,
+                  us.user_name
+                    FROM shopping_lists sl
+                      LEFT JOIN users_shopping_lists usl ON sl.shopping_list_id=usl.shopping_list_id
+                      LEFT JOIN users us ON usl.user_id = us.user_id
+              ) list_usr GROUP BY list_usr.shopping_list_id
+            ) users_for_list ON users_for_list.shopping_list_id=usl.shopping_list_id
+          WHERE us.user_id=$1`,
       [userId]
     );
   }

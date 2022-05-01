@@ -1,5 +1,6 @@
 const { db } = require("../db");
 const { SomethingWentWrong, BadRequest, Forbidden } = require("../errors");
+const constants = require("../utils/constants");
 
 const getUsersShoppingLists = async (userId, shoppingListId) => {
   try {
@@ -39,7 +40,8 @@ const createUsersShoppingLists = async (
 
       if (!userId) {
         const user = await t.users.findByUserNameOrEmail(userName, email);
-        if (!user) throw new BadRequest();
+        if (!user)
+          throw new BadRequest(constants.errorsMessages.thisUserDoesNotExist);
 
         userId = user.userId;
       }
@@ -54,7 +56,9 @@ const createUsersShoppingLists = async (
       );
       if (!createdRelation) throw new SomethingWentWrong();
 
-      return createdRelation;
+      const user = await t.users.findById(createdRelation.userId);
+
+      return { ...createdRelation, userName: user.userName };
     });
 
     return result;

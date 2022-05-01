@@ -28,7 +28,12 @@ router.put(
   validateStorageBody,
   storagesController.edit
 );
-router.delete("/:storageId", validateStorageId, storagesController.remove);
+router.delete(
+  "/:storageId",
+  validateStorageId,
+  validateParams,
+  storagesController.remove
+);
 
 // users storages
 router.get("/:storageId/users", validateStorageId, usersStoragesController.get);
@@ -49,7 +54,6 @@ router.delete(
   "/:storageId/users/:userId",
   validateStorageId,
   validateUserId,
-  validateParams,
   usersStoragesController.remove
 );
 
