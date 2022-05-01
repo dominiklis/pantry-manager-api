@@ -18,11 +18,11 @@ const get = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, userName } = req.user;
   const { shoppingListName } = req.body;
 
   try {
-    const result = await createShoppingList(userId, shoppingListName);
+    const result = await createShoppingList(userId, shoppingListName, userName);
 
     return res.status(201).json(result);
   } catch (error) {

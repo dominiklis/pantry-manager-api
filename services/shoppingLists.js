@@ -11,7 +11,7 @@ const getShoppingLists = async (userId) => {
   }
 };
 
-const createShoppingList = async (userId, shoppingListName) => {
+const createShoppingList = async (userId, shoppingListName, userName) => {
   try {
     const result = await db.task(async (t) => {
       const createdList = await t.shoppingLists.create(
@@ -20,7 +20,7 @@ const createShoppingList = async (userId, shoppingListName) => {
       );
       if (!createdList) throw new SomethingWentWrong();
 
-      await t.usersShoppingLists.create(
+      const usersList = await t.usersShoppingLists.create(
         userId,
         createdList.shoppingListId,
         true,
@@ -29,7 +29,11 @@ const createShoppingList = async (userId, shoppingListName) => {
         true
       );
 
-      return createdList;
+      return {
+        ...createdList,
+        ...usersList,
+        users: [{ userName, ...usersList }],
+      };
     });
 
     return result;
