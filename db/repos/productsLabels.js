@@ -11,10 +11,10 @@ class ProductsLabelsRepository {
     );
   }
 
-  async removeForProduct(productId) {
+  async removeForProduct(userId, productId) {
     return this.db.manyOrNone(
-      `DELETE FROM products_labels WHERE product_id=$1 RETURNING *`,
-      [productId]
+      `DELETE FROM products_labels USING labels WHERE owner_id=$1 AND product_id=$2 RETURNING *`,
+      [userId, productId]
     );
   }
 }
