@@ -29,8 +29,8 @@ const createProductsLabelsRelations = async (
   return result;
 };
 
-const removeProductsLabelsRelations = async (task, productId) => {
-  await task.productsLabels.removeForProduct(productId);
+const removeProductsLabelsRelations = async (task, userId, productId) => {
+  await task.productsLabels.removeForProduct(userId, productId);
 };
 
 const getProducts = async (userId) => {
@@ -123,7 +123,7 @@ const editProduct = async (
       );
       if (!editedProduct) throw new SomethingWentWrong();
 
-      await removeProductsLabelsRelations(t, productId);
+      await removeProductsLabelsRelations(t, userId, productId);
 
       if (labels && labels.length) {
         labels = await createProductsLabelsRelations(

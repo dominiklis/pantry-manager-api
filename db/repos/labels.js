@@ -30,10 +30,10 @@ class LabelsRepository {
     );
   }
 
-  async remove(labelId) {
+  async remove(userId, labelId) {
     return this.db.oneOrNone(
-      `DELETE FROM labels WHERE label_id=$1 RETURNING *`,
-      [labelId]
+      `DELETE FROM labels WHERE owner_id=$1 AND label_id=$2 RETURNING *`,
+      [userId, labelId]
     );
   }
 }
