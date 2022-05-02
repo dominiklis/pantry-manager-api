@@ -6,7 +6,11 @@ const {
   usersStoragesController,
 } = require("../controllers");
 
-const { validateRequestBody, validateRouteParam } = require("../middleware");
+const {
+  validateRequestBody,
+  validateRouteParam,
+  validateUrlParams,
+} = require("../middleware");
 
 const validateStorageBody = validateRequestBody("storage");
 const validateCreateUsersStoragesBody = validateRequestBody(
@@ -17,7 +21,7 @@ const validateEditUsersStoragesBody = validateRequestBody("edit users sharing");
 const validateStorageId = validateRouteParam("storageId");
 const validateUserId = validateRouteParam("userId");
 
-const validateParams = validateRouteParam("delete products");
+const validateParams = validateUrlParams("delete products");
 
 // storages
 router.get("/", storagesController.get);
