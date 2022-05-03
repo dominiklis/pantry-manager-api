@@ -130,7 +130,8 @@ const deleteUsersStorages = async (loggedUserId, storageId, userId) => {
 
       if (
         !loggedUserRelation ||
-        (!loggedUserRelation.canChangePermissions &&
+        (loggedUserId !== userId &&
+          !loggedUserRelation.canChangePermissions &&
           !loggedUserRelation.canShare)
       )
         throw new Forbidden();

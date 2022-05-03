@@ -126,7 +126,8 @@ const deleteUsersShoppingLists = async (
       );
       if (
         !loggedUserRelation ||
-        (!loggedUserRelation.canChangePermissions &&
+        (loggedUserId !== userId &&
+          !loggedUserRelation.canChangePermissions &&
           !loggedUserRelation.canShare)
       )
         throw new Forbidden();
