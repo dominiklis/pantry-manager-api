@@ -6,7 +6,11 @@ const {
   usersShoppingListsController,
 } = require("../controllers");
 
-const { validateRequestBody, validateRouteParam } = require("../middleware");
+const {
+  validateRequestBody,
+  validateRouteParam,
+  validateUrlParams,
+} = require("../middleware");
 
 const validateShoppingListBody = validateRequestBody("shopping list");
 const validateCreateUsersShoppingListsBody = validateRequestBody(
@@ -18,7 +22,7 @@ const validateEditUsersShoppingListsBody =
 const validateShoppingListId = validateRouteParam("shoppingListId");
 const validateUserId = validateRouteParam("userId");
 
-const validateParams = validateRouteParam("delete items");
+const validateParams = validateUrlParams("delete items");
 
 // shopping lists
 router.get("/", shoppingListsController.get);
