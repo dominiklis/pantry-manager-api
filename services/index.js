@@ -1,4 +1,4 @@
-const { loginUser, registerUser, renewToken } = require("./users");
+const { loginUser, registerUser, updateUser, renewToken } = require("./users");
 const {
   getProducts,
   editProduct,
@@ -40,6 +40,7 @@ const {
 module.exports = {
   loginUser,
   registerUser,
+  updateUser,
   renewToken,
 
   getProducts,

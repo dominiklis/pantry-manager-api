@@ -21,6 +21,13 @@ class UsersRepository {
   async findById(userId) {
     return this.db.oneOrNone("SELECT * FROM users WHERE user_id=$1;", [userId]);
   }
+
+  async edit(userId, userName, email, password) {
+    return this.db.oneOrNone(
+      `UPDATE users SET user_name=$2, email=$3, password=$4 WHERE user_id=$1 RETURNING *`,
+      [userId, userName, email, password]
+    );
+  }
 }
 
 module.exports = UsersRepository;

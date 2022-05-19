@@ -1,4 +1,9 @@
-const { loginUser, registerUser, renewToken } = require("../services");
+const {
+  loginUser,
+  registerUser,
+  updateUser,
+  renewToken,
+} = require("../services");
 
 const login = async (req, res, next) => {
   const { userName, email, password } = req.body;
@@ -24,6 +29,27 @@ const register = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  const { userId, userName, email } = req.user;
+  const { newUserName, newEmail, currentPassword, newPassword } = req.body;
+
+  try {
+    const result = await updateUser(
+      userId,
+      userName,
+      email,
+      newUserName,
+      newEmail,
+      currentPassword,
+      newPassword
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const renew = async (req, res, next) => {
   const { userId, userName, email } = req.user;
 
@@ -39,5 +65,6 @@ const renew = async (req, res, next) => {
 module.exports = {
   login,
   register,
+  update,
   renew,
 };

@@ -19,6 +19,12 @@ const schemas = {
     email: Joi.string().email().required(),
     password: Joi.string().required().custom(validatePassword),
   }),
+  "update user": Joi.object({
+    currentPassword: Joi.string().required().custom(validatePassword),
+    newEmail: Joi.string().email().allow("", null),
+    newUserName: Joi.string().min(3).allow("", null),
+    newPassword: Joi.string().custom(validatePassword).allow("", null),
+  }),
 
   product: Joi.object({
     productName: Joi.string().min(1).required(),

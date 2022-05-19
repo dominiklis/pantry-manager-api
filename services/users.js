@@ -75,10 +75,75 @@ const registerUser = async (userName, email, password) => {
   }
 };
 
+const updateUser = async (
+  userId,
+  userName,
+  email,
+  newUserName,
+  newEmail,
+  currentPassword,
+  newPassword
+) => {
+  try {
+    const result = await db.task(async (t) => {
+      const user = await t.users.findById(userId);
+      if (
+        !user ||
+        !user.userId ||
+        !user.userName ||
+        !user.email ||
+        !user.password ||
+        user.userName !== userName ||
+        user.email !== email
+      )
+        throw new InvalidToken();
+
+      const isPasswordValid = await bcrypt.compare(
+        currentPassword,
+        user.password
+      );
+      if (!isPasswordValid)
+        throw new BadRequest(constants.errorsMessages.invalid);
+
+      let hashedPassword = user.password;
+      if (newPassword) {
+        hashedPassword = await bcrypt.hash(newPassword, 10);
+      }
+
+      const updatedUser = await t.users.edit(
+        userId,
+        newUserName ?? user.userName,
+        newEmail ?? user.email,
+        hashedPassword
+      );
+
+      const token = createToken(
+        userId,
+        updatedUser.userName,
+        updatedUser.email
+      );
+
+      return {
+        userId,
+        userName: updatedUser.userName,
+        email: updatedUser.email,
+        token,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    if (error?.code === "23505")
+      throw new BadRequest(constants.errorsMessages.duplicateUser);
+
+    throw error;
+  }
+};
+
 const renewToken = async (userId, userName, email) => {
   const result = await db.task(async (t) => {
-    const user = await db.users.findById(userId);
-
+    const user = await t.users.findById(userId);
     if (
       !user ||
       !user.userId ||
@@ -116,5 +181,6 @@ const renewToken = async (userId, userName, email) => {
 module.exports = {
   loginUser,
   registerUser,
+  updateUser,
   renewToken,
 };
