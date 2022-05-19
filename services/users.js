@@ -112,8 +112,8 @@ const updateUser = async (
 
       const updatedUser = await t.users.edit(
         userId,
-        newUserName ?? user.userName,
-        newEmail ?? user.email,
+        newUserName || user.userName,
+        newEmail || user.email,
         hashedPassword
       );
 
