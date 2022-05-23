@@ -86,9 +86,6 @@ const editUsersShoppingLists = async (
       if (list.ownerId === userId || list.ownerId !== loggedUserId)
         throw new Forbidden();
 
-      const list = await t.shoppingLists.findById(shoppingListId);
-      if (list.ownerId === userId) throw new Forbidden();
-
       const editedRelation = await t.usersShoppingLists.edit(
         userId,
         shoppingListId,
