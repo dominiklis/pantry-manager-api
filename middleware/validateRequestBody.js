@@ -73,16 +73,10 @@ const schemas = {
     userName: Joi.string().min(3).empty(""),
     email: Joi.string().email().empty(""),
     canShare: Joi.bool(),
-    canEdit: Joi.bool(),
-    canDelete: Joi.bool(),
-    canChangePermissions: Joi.bool(),
   }),
 
   "edit users sharing": Joi.object({
     canShare: Joi.bool(),
-    canEdit: Joi.bool(),
-    canDelete: Joi.bool(),
-    canChangePermissions: Joi.bool(),
   }),
 
   "shopping list item": Joi.object({

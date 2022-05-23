@@ -30,10 +30,7 @@ const createUsersStorages = async (
   userId,
   userName,
   email,
-  canShare,
-  canEdit,
-  canDelete,
-  canChangePermissions
+  canShare
 ) => {
   try {
     const result = await db.task(async (t) => {
@@ -52,13 +49,14 @@ const createUsersStorages = async (
         userId = user.userId;
       }
 
+      const storageToShare = await t.storages.findById(storageId);
+      if (!storageToShare) throw new BadRequest();
+      if (storageToShare.ownerId !== loggedUserId) canShare = false;
+
       const createdRelation = await t.usersStorages.create(
         userId,
         storageId,
-        canShare,
-        canEdit,
-        canDelete,
-        canChangePermissions
+        canShare
       );
       if (!createdRelation) throw new SomethingWentWrong();
 
@@ -76,38 +74,20 @@ const createUsersStorages = async (
   }
 };
 
-const editUsersStorages = async (
-  loggedUserId,
-  storageId,
-  userId,
-  canShare,
-  canEdit,
-  canDelete,
-  canChangePermissions
-) => {
+const editUsersStorages = async (loggedUserId, storageId, userId, canShare) => {
   try {
     const result = await db.task(async (t) => {
-      const loggedUserRelation = await t.usersStorages.findById(
-        loggedUserId,
-        storageId
-      );
-
-      if (!loggedUserRelation || !loggedUserRelation.canChangePermissions)
-        throw new Forbidden();
-
       const relationToEdit = await t.usersStorages.findById(userId, storageId);
       if (!relationToEdit) throw new BadRequest();
 
       const storage = await t.storages.findById(storageId);
-      if (storage.ownerId === userId) throw new Forbidden();
+      if (storage.ownerId === userId || storage.ownerId !== loggedUserId)
+        throw new Forbidden();
 
       const editedRelation = await t.usersStorages.edit(
         userId,
         storageId,
-        canShare,
-        canEdit,
-        canDelete,
-        canChangePermissions
+        canShare
       );
       if (!editedRelation) throw new SomethingWentWrong();
 

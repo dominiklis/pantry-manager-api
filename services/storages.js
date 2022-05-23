@@ -25,9 +25,6 @@ const createStorage = async (userId, userName, storageName, color) => {
       const usersStorages = await t.usersStorages.create(
         userId,
         createdStorage.storageId,
-        true,
-        true,
-        true,
         true
       );
 
@@ -54,7 +51,7 @@ const editStorage = async (userId, storageId, storageName, color) => {
       if (storageToEdit.ownerId !== userId) {
         const relation = await t.usersStorages.findById(userId, storageId);
 
-        if (!relation || !relation.canEdit) throw new Forbidden();
+        if (!relation) throw new Forbidden();
       }
 
       const editedStorage = await t.storages.edit(
@@ -80,11 +77,9 @@ const removeStorage = async (userId, storageId, deleteProducts) => {
       if (!storageToRemove)
         throw new BadRequest(constants.errorsMessages.notFound);
 
-      if (storageToRemove.ownerId !== userId) {
-        const relation = await t.usersStorages.findById(userId, storageId);
+      if (storageToRemove.ownerId !== userId) throw new Forbidden();
 
-        if (!relation || !relation.canDelete) throw new Forbidden();
-      }
+      console.log(storageToRemove.ownerId, userId);
 
       if (deleteProducts === "true")
         await db.products.removeProductsInStorage(storageId);

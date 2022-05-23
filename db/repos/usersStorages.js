@@ -17,9 +17,6 @@ class UsersStoragesRepository {
       `SELECT 
         ust.user_id,
         ust.can_share,
-        ust.can_edit,
-        ust.can_delete,
-        ust.can_change_permissions,
         us.user_name
           FROM users_storages ust
             LEFT JOIN users us ON us.user_id=ust.user_id
@@ -28,35 +25,21 @@ class UsersStoragesRepository {
     );
   }
 
-  async create(
-    userId,
-    storageId,
-    canShare = false,
-    canEdit = false,
-    canDelete = false,
-    canChangePermissions = false
-  ) {
+  async create(userId, storageId, canShare = false) {
     return this.db.oneOrNone(
       `INSERT INTO users_storages (
-        user_id, storage_id, can_share, can_edit, can_delete, can_change_permissions)
-          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [userId, storageId, canShare, canEdit, canDelete, canChangePermissions]
+        user_id, storage_id, can_share)
+          VALUES ($1, $2, $3) RETURNING *`,
+      [userId, storageId, canShare]
     );
   }
 
-  async edit(
-    userId,
-    storageId,
-    canShare,
-    canEdit,
-    canDelete,
-    canChangePermissions
-  ) {
+  async edit(userId, storageId, canShare) {
     return this.db.oneOrNone(
       `UPDATE users_storages SET 
-        can_share=$3, can_edit=$4, can_delete=$5, can_change_permissions=$6
+        can_share=$3
           WHERE user_id=$1 AND storage_id=$2 RETURNING *`,
-      [userId, storageId, canShare, canEdit, canDelete, canChangePermissions]
+      [userId, storageId, canShare]
     );
   }
 

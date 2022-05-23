@@ -15,7 +15,7 @@ class StoragesRepository {
   async get(userId) {
     return this.db.manyOrNone(
       `SELECT st.*,
-        can_share, can_edit, can_delete, can_change_permissions,
+        can_share,
         user_name owner_name,
         users_for_storage.users
           FROM users_storages ust
@@ -27,9 +27,6 @@ class StoragesRepository {
                   st.storage_id, 
                   ust.user_id,
                   ust.can_share,
-                  ust.can_edit,
-                  ust.can_delete,
-                  ust.can_change_permissions,
                   us.user_name
                     FROM storages st
                       LEFT JOIN users_storages ust ON st.storage_id=ust.storage_id
