@@ -79,8 +79,6 @@ const removeStorage = async (userId, storageId, deleteProducts) => {
 
       if (storageToRemove.ownerId !== userId) throw new Forbidden();
 
-      console.log(storageToRemove.ownerId, userId);
-
       if (deleteProducts === "true")
         await db.products.removeProductsInStorage(storageId);
 
