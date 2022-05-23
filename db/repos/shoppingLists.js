@@ -14,7 +14,7 @@ class ShoppingListsRepository {
   async get(userId) {
     return this.db.manyOrNone(
       `SELECT sl.*,
-        can_share, can_edit, can_delete, can_change_permissions,
+        can_share,
         user_name owner_name,
         users_for_list.users
           FROM users_shopping_lists usl
@@ -26,9 +26,6 @@ class ShoppingListsRepository {
                   sl.shopping_list_id, 
                   usl.user_id,
                   usl.can_share,
-                  usl.can_edit,
-                  usl.can_delete,
-                  usl.can_change_permissions,
                   us.user_name
                     FROM shopping_lists sl
                       LEFT JOIN users_shopping_lists usl ON sl.shopping_list_id=usl.shopping_list_id

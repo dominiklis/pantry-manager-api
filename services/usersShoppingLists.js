@@ -24,10 +24,7 @@ const createUsersShoppingLists = async (
   userId,
   userName,
   email,
-  canShare,
-  canEdit,
-  canDelete,
-  canChangePermissions
+  canShare
 ) => {
   try {
     const result = await db.task(async (t) => {
@@ -46,13 +43,14 @@ const createUsersShoppingLists = async (
         userId = user.userId;
       }
 
+      const listToShare = await t.shoppingLists.findById(shoppingListId);
+      if (!listToShare) throw new BadRequest();
+      if (listToShare.ownerId !== loggedUserId) canShare = false;
+
       const createdRelation = await t.usersShoppingLists.create(
         userId,
         shoppingListId,
-        canShare,
-        canEdit,
-        canDelete,
-        canChangePermissions
+        canShare
       );
       if (!createdRelation) throw new SomethingWentWrong();
 
@@ -63,6 +61,9 @@ const createUsersShoppingLists = async (
 
     return result;
   } catch (error) {
+    if (error?.code === "23505")
+      throw new Duplicate("user alread has an access to this list");
+
     throw error;
   }
 };
@@ -71,20 +72,10 @@ const editUsersShoppingLists = async (
   loggedUserId,
   shoppingListId,
   userId,
-  canShare,
-  canEdit,
-  canDelete,
-  canChangePermissions
+  canShare
 ) => {
   try {
     const result = await db.task(async (t) => {
-      const loggedUserRelation = await t.usersShoppingLists.findById(
-        loggedUserId,
-        shoppingListId
-      );
-      if (!loggedUserRelation || !loggedUserRelation.canChangePermissions)
-        throw new Forbidden();
-
       const relationToEdit = await t.usersShoppingLists.findById(
         userId,
         shoppingListId
@@ -92,15 +83,16 @@ const editUsersShoppingLists = async (
       if (!relationToEdit) throw new BadRequest();
 
       const list = await t.shoppingLists.findById(shoppingListId);
+      if (list.ownerId === userId || list.ownerId !== loggedUserId)
+        throw new Forbidden();
+
+      const list = await t.shoppingLists.findById(shoppingListId);
       if (list.ownerId === userId) throw new Forbidden();
 
       const editedRelation = await t.usersShoppingLists.edit(
         userId,
         shoppingListId,
-        canShare,
-        canEdit,
-        canDelete,
-        canChangePermissions
+        canShare
       );
 
       if (!editedRelation) throw new SomethingWentWrong();

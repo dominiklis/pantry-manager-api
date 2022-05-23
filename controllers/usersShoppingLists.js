@@ -21,15 +21,7 @@ const get = async (req, res, next) => {
 const create = async (req, res, next) => {
   const { userId: loggedUserId } = req.user;
   const { shoppingListId } = req.params;
-  const {
-    userId,
-    userName,
-    email,
-    canShare,
-    canEdit,
-    canDelete,
-    canChangePermissions,
-  } = req.body;
+  const { userId, userName, email, canShare } = req.body;
 
   try {
     const result = await createUsersShoppingLists(
@@ -38,10 +30,7 @@ const create = async (req, res, next) => {
       userId,
       userName,
       email,
-      canShare,
-      canEdit,
-      canDelete,
-      canChangePermissions
+      canShare
     );
 
     res.status(201).json(result);
@@ -53,17 +42,14 @@ const create = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId: loggedUserId } = req.user;
   const { shoppingListId, userId } = req.params;
-  const { canShare, canEdit, canDelete, canChangePermissions } = req.body;
+  const { canShare } = req.body;
 
   try {
     const result = await editUsersShoppingLists(
       loggedUserId,
       shoppingListId,
       userId,
-      canShare,
-      canEdit,
-      canDelete,
-      canChangePermissions
+      canShare
     );
 
     res.status(200).json(result);
