@@ -1,6 +1,6 @@
 const { db } = require("../db");
 const { SomethingWentWrong, BadRequest, Forbidden } = require("../errors");
-const { constants } = require("../utils");
+const { constants, changeColorToSnakeCase } = require("../utils");
 
 const getStorages = async (userId) => {
   try {
@@ -13,6 +13,8 @@ const getStorages = async (userId) => {
 };
 
 const createStorage = async (userId, userName, storageName, color) => {
+  color = changeColorToSnakeCase(color);
+
   try {
     const result = await db.task(async (t) => {
       const createdStorage = await t.storages.create(
@@ -42,6 +44,8 @@ const createStorage = async (userId, userName, storageName, color) => {
 };
 
 const editStorage = async (userId, storageId, storageName, color) => {
+  color = changeColorToSnakeCase(color);
+
   try {
     const result = await db.task(async (t) => {
       const storageToEdit = await t.storages.findById(storageId);

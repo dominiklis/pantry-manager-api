@@ -1,4 +1,5 @@
 const pgPromise = require("pg-promise");
+const { changeColorToCamelCase } = require("../utils");
 const {
   Users,
   Products,
@@ -21,11 +22,21 @@ const replacePropertiesWithCamelized = (camelCaseName, originalName, data) => {
   return data;
 };
 
+const camelizeColorValues = (data) => {
+  for (let i = 0; i < data.length; i++) {
+    data[i]["color"] = changeColorToCamelCase(data[i]["color"]);
+  }
+
+  return data;
+};
+
 const camelizeColumns = (data) => {
   const tmp = data?.[0];
 
   if (tmp && typeof tmp === "object") {
     for (const prop in tmp) {
+      if (prop === "color") camelizeColorValues(data);
+
       if (Array.isArray(tmp[prop])) {
         for (let i = 0; i < data.length; i++) {
           camelizeColumns(data[i][prop]);
