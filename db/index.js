@@ -2,6 +2,7 @@ const pgPromise = require("pg-promise");
 const { changeColorToCamelCase } = require("../utils");
 const {
   Users,
+  Settings,
   Products,
   ProductsLabels,
   Storages,
@@ -54,6 +55,7 @@ const camelizeColumns = (data) => {
 const initOptions = {
   extend(obj, dc) {
     obj.users = new Users(obj, pgp);
+    obj.settings = new Settings(obj, pgp);
     obj.products = new Products(obj, pgp);
     obj.labels = new Labels(obj, pgp);
     obj.productsLabels = new ProductsLabels(obj, pgp);

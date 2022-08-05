@@ -53,6 +53,8 @@ const registerUser = async (userName, email, password) => {
     const result = await db.task(async (t) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const { userId } = await db.users.create(userName, email, hashedPassword);
+      const settings = await db.settings.create(userId);
+      console.log(settings);
 
       const token = createToken(userId, userName, email);
 

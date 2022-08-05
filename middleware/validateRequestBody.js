@@ -26,6 +26,10 @@ const schemas = {
     newPassword: Joi.string().custom(validatePassword).allow("", null),
   }),
 
+  settings: Joi.object({
+    defaultNumberOfDaysForWarning: Joi.number().integer().min(1),
+  }),
+
   product: Joi.object({
     productName: Joi.string().min(1).required(),
     expirationDate: Joi.string().regex(datePattern).allow(null),

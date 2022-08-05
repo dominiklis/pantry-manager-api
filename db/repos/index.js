@@ -1,5 +1,6 @@
 module.exports = {
   Users: require("./users"),
+  Settings: require("./settings"),
   Products: require("./products"),
   Labels: require("./labels"),
   ProductsLabels: require("./productsLabels"),
