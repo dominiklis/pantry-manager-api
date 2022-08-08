@@ -32,6 +32,7 @@ const schemas = {
       .min(1)
       .allow("", null),
     language: Joi.string().valid("en", "pl").allow("", null),
+    theme: Joi.string().valid("light", "dark").allow("", null),
   }),
 
   product: Joi.object({
