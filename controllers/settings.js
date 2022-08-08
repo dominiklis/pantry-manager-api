@@ -16,13 +16,14 @@ const getById = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId } = req.user;
   const { settingsId } = req.params;
-  const { defaultNumberOfDaysForWarning } = req.body;
+  const { defaultNumberOfDaysForWarning, language } = req.body;
 
   try {
     const result = await editSettings(
       userId,
       settingsId,
-      defaultNumberOfDaysForWarning
+      defaultNumberOfDaysForWarning,
+      language
     );
 
     return res.status(200).json(result);

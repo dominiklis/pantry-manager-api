@@ -27,7 +27,11 @@ const schemas = {
   }),
 
   settings: Joi.object({
-    defaultNumberOfDaysForWarning: Joi.number().integer().min(1),
+    defaultNumberOfDaysForWarning: Joi.number()
+      .integer()
+      .min(1)
+      .allow("", null),
+    language: Joi.string().valid("en", "pl").allow("", null),
   }),
 
   product: Joi.object({

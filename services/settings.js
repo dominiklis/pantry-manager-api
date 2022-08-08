@@ -16,14 +16,18 @@ const getSettings = async (userId, settingsId) => {
 const editSettings = async (
   userId,
   settingsId,
-  defaultNumberOfDaysForWarning
+  defaultNumberOfDaysForWarning,
+  language
 ) => {
   if (userId !== settingsId) throw new BadRequest();
 
   try {
+    const settings = await db.settings.findById(userId);
+
     const results = await db.settings.edit(
       userId,
-      defaultNumberOfDaysForWarning
+      defaultNumberOfDaysForWarning ?? settings.defaultNumberOfDaysForWarning,
+      language ?? settings.language
     );
 
     return results;
