@@ -23,22 +23,11 @@ const loginUser = async (userName, email, password) => {
 
       const token = createToken(user.userId, user.userName, user.email);
 
-      const storages = await t.storages.get(user.userId);
-      const products = await t.products.get(user.userId);
-      const labels = await t.labels.get(user.userId);
-      const shoppingLists = await t.shoppingLists.get(user.userId);
-      const shoppingListItems = await t.shoppingListItems.get(user.userId);
-
       return {
         userId: user.userId,
         userName: user.userName,
         email: user.email,
         token,
-        storages,
-        products,
-        labels,
-        shoppingLists,
-        shoppingListItems,
       };
     });
 
@@ -63,11 +52,6 @@ const registerUser = async (userName, email, password) => {
         userName,
         email,
         token,
-        storages: [],
-        products: [],
-        labels: [],
-        shoppingLists: [],
-        shoppingListItems: [],
       };
     });
 
