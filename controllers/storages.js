@@ -19,10 +19,16 @@ const get = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { userId, userName } = req.user;
-  const { storageName, color } = req.body;
+  const { storageName, color, numberOfDaysForWarning } = req.body;
 
   try {
-    const result = await createStorage(userId, userName, storageName, color);
+    const result = await createStorage(
+      userId,
+      userName,
+      storageName,
+      color,
+      numberOfDaysForWarning
+    );
 
     res.status(201).json(result);
   } catch (error) {
@@ -33,10 +39,16 @@ const create = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId } = req.user;
   const { storageId } = req.params;
-  const { storageName, color } = req.body;
+  const { storageName, color, numberOfDaysForWarning } = req.body;
 
   try {
-    const result = await editStorage(userId, storageId, storageName, color);
+    const result = await editStorage(
+      userId,
+      storageId,
+      storageName,
+      color,
+      numberOfDaysForWarning
+    );
 
     res.status(200).json(result);
   } catch (error) {

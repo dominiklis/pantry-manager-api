@@ -71,6 +71,7 @@ const schemas = {
         "white"
       )
       .required(),
+    numberOfDaysForWarning: Joi.number().integer().min(1).allow("", null),
   }),
 
   "shopping list": Joi.object({

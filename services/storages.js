@@ -12,7 +12,13 @@ const getStorages = async (userId) => {
   }
 };
 
-const createStorage = async (userId, userName, storageName, color) => {
+const createStorage = async (
+  userId,
+  userName,
+  storageName,
+  color,
+  numberOfDaysForWarning
+) => {
   color = changeColorToSnakeCase(color);
 
   try {
@@ -20,7 +26,8 @@ const createStorage = async (userId, userName, storageName, color) => {
       const createdStorage = await t.storages.create(
         userId,
         storageName,
-        color
+        color,
+        numberOfDaysForWarning
       );
       if (!createdStorage) throw new SomethingWentWrong();
 
@@ -43,7 +50,13 @@ const createStorage = async (userId, userName, storageName, color) => {
   }
 };
 
-const editStorage = async (userId, storageId, storageName, color) => {
+const editStorage = async (
+  userId,
+  storageId,
+  storageName,
+  color,
+  numberOfDaysForWarning
+) => {
   color = changeColorToSnakeCase(color);
 
   try {
@@ -61,7 +74,8 @@ const editStorage = async (userId, storageId, storageName, color) => {
       const editedStorage = await t.storages.edit(
         storageId,
         storageName,
-        color
+        color,
+        numberOfDaysForWarning
       );
       if (!editedStorage) throw new SomethingWentWrong();
 

@@ -38,22 +38,22 @@ class StoragesRepository {
     );
   }
 
-  async create(userId, storageName, color) {
+  async create(userId, storageName, color, numberOfDaysForWarning) {
     return this.db.oneOrNone(
       `INSERT INTO storages(
-        owner_id, storage_name, color) 
-          VALUES($1, $2, $3) RETURNING *`,
-      [userId, storageName, color]
+        owner_id, storage_name, color, number_of_days_for_warning) 
+          VALUES($1, $2, $3, $4) RETURNING *`,
+      [userId, storageName, color, numberOfDaysForWarning]
     );
   }
 
-  async edit(storageId, storageName, color) {
+  async edit(storageId, storageName, color, numberOfDaysForWarning) {
     return this.db.oneOrNone(
       `UPDATE storages SET
-        storage_name=$2, color=$3
+        storage_name=$2, color=$3, number_of_days_for_warning=$4
           WHERE storage_id=$1  
             RETURNING *`,
-      [storageId, storageName, color]
+      [storageId, storageName, color, numberOfDaysForWarning]
     );
   }
 
