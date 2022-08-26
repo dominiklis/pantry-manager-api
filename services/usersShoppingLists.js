@@ -1,5 +1,10 @@
 const { db } = require("../db");
-const { SomethingWentWrong, BadRequest, Forbidden } = require("../errors");
+const {
+  SomethingWentWrong,
+  BadRequest,
+  Forbidden,
+  Duplicate,
+} = require("../errors");
 const constants = require("../utils/constants");
 
 const getUsersShoppingLists = async (userId, shoppingListId) => {
