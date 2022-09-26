@@ -48,7 +48,6 @@ const createProduct = async (
   productName,
   expirationDate,
   amount,
-  unit,
   storageId,
   labels
 ) => {
@@ -65,7 +64,6 @@ const createProduct = async (
         productName,
         expirationDate,
         amount,
-        unit,
         storageId
       );
       if (!createdProduct) throw new SomethingWentWrong();
@@ -94,7 +92,6 @@ const editProduct = async (
   productName,
   expirationDate,
   amount,
-  unit,
   storageId,
   labels
 ) => {
@@ -118,7 +115,6 @@ const editProduct = async (
         productName,
         expirationDate,
         amount,
-        unit,
         storageId
       );
       if (!editedProduct) throw new SomethingWentWrong();

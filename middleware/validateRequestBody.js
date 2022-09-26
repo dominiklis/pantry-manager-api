@@ -38,8 +38,7 @@ const schemas = {
   product: Joi.object({
     productName: Joi.string().min(1).required(),
     expirationDate: Joi.string().regex(datePattern).allow(null),
-    amount: Joi.number().min(0).allow(null),
-    unit: Joi.string().allow(null, ""),
+    amount: Joi.string().max(100).allow(null, ""),
     storageId: Joi.string().guid().allow(null),
     labels: Joi.array().items(Joi.string().guid()).allow(null),
   }),

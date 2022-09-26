@@ -7,7 +7,6 @@ const { validateRequestBody, validateRouteParam } = require("../middleware");
 
 const validateProduct = validateRequestBody("product");
 const validateProductId = validateRouteParam("productId");
-const validateStorageId = validateRouteParam("storageId");
 
 router.get("/", productsController.get);
 router.post("/", validateProduct, productsController.create);

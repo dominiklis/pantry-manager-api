@@ -29,25 +29,24 @@ class ProductsRepository {
     );
   }
 
-  async create(userId, productName, expirationDate, amount, unit, storageId) {
+  async create(userId, productName, expirationDate, amount, storageId) {
     return this.db.oneOrNone(
       `INSERT INTO products(
-        owner_id, product_name, expiration_date, amount, unit, storage_id) 
-          VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [userId, productName, expirationDate, amount, unit, storageId]
+        owner_id, product_name, expiration_date, amount, storage_id) 
+          VALUES($1, $2, $3, $4, $5) RETURNING *`,
+      [userId, productName, expirationDate, amount, storageId]
     );
   }
 
-  async edit(productId, productName, expirationDate, amount, unit, storageId) {
+  async edit(productId, productName, expirationDate, amount, storageId) {
     return this.db.oneOrNone(
       `UPDATE products SET
         product_name=$2,
         expiration_date=$3,
         amount=$4,
-        unit=$5,
-        storage_id=$6
+        storage_id=$5
           WHERE product_id=$1 RETURNING *`,
-      [productId, productName, expirationDate, amount, unit, storageId]
+      [productId, productName, expirationDate, amount, storageId]
     );
   }
 
