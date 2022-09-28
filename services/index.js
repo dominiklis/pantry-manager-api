@@ -6,6 +6,7 @@ const {
   createProduct,
   removeProduct,
 } = require("./products");
+const { createCollectionOfProducts } = require("./collectionsOfProducts");
 const { getLabels, createLabel, editLabel, removeLabel } = require("./labels");
 const {
   getStorages,
@@ -51,6 +52,8 @@ module.exports = {
   createProduct,
   editProduct,
   removeProduct,
+
+  createCollectionOfProducts,
 
   getLabels,
   createLabel,

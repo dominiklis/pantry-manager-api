@@ -4,6 +4,15 @@ const { ValidationError } = require("../errors");
 
 const datePattern = /^(\d{4})-(\d{2})-(\d{2})/;
 
+const productObjectSchema = Joi.object({
+  productId: Joi.string().uuid().allow(null),
+  productName: Joi.string().min(1).required(),
+  expirationDate: Joi.string().regex(datePattern).allow(null),
+  amount: Joi.string().max(100).allow(null, ""),
+  storageId: Joi.string().guid().allow(null),
+  labels: Joi.array().items(Joi.string().guid()).allow(null),
+});
+
 const schemas = {
   "login user": Joi.object({
     userName: Joi.string().min(3).empty(""),
@@ -35,12 +44,10 @@ const schemas = {
     theme: Joi.string().valid("light", "dark").allow("", null),
   }),
 
-  product: Joi.object({
-    productName: Joi.string().min(1).required(),
-    expirationDate: Joi.string().regex(datePattern).allow(null),
-    amount: Joi.string().max(100).allow(null, ""),
-    storageId: Joi.string().guid().allow(null),
-    labels: Joi.array().items(Joi.string().guid()).allow(null),
+  product: productObjectSchema,
+
+  "collection of products": Joi.object({
+    products: Joi.array().items(productObjectSchema),
   }),
 
   label: Joi.object({

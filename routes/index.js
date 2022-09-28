@@ -6,6 +6,7 @@ const { authMiddleware } = require("../middleware");
 const usersRouter = require("./users");
 const settingsRouter = require("./settings");
 const productsRouter = require("./products");
+const collectionsOfProductsRouter = require("./collectionsOfProducts");
 const storagesRouter = require("./storages");
 const labelsRouter = require("./labels");
 const shoppingListsRouter = require("./shoppingLists");
@@ -16,6 +17,12 @@ router.use("/users", usersRouter);
 router.use("/settings", authMiddleware, settingsRouter);
 
 router.use("/products", authMiddleware, productsRouter);
+
+router.use(
+  "/collections-of-products",
+  authMiddleware,
+  collectionsOfProductsRouter
+);
 
 router.use("/labels", authMiddleware, labelsRouter);
 
