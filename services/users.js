@@ -42,8 +42,7 @@ const registerUser = async (userName, email, password) => {
     const result = await db.task(async (t) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const { userId } = await db.users.create(userName, email, hashedPassword);
-      const settings = await db.settings.create(userId);
-      console.log(settings);
+      await db.settings.create(userId);
 
       const token = createToken(userId, userName, email);
 
@@ -119,7 +118,6 @@ const updateUser = async (
 
     return result;
   } catch (error) {
-    console.log(error);
     if (error?.code === "23505")
       throw new BadRequest(constants.errorsMessages.duplicateUser);
 
