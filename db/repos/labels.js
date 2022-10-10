@@ -11,9 +11,10 @@ class LabelsRepository {
   }
 
   async get(userId) {
-    return this.db.manyOrNone(`SELECT * FROM labels WHERE owner_id=$1`, [
-      userId,
-    ]);
+    return this.db.manyOrNone(
+      `SELECT label_id, label_name FROM labels WHERE owner_id=$1`,
+      [userId]
+    );
   }
 
   async create(userId, labelName) {
