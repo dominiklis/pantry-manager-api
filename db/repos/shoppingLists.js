@@ -15,7 +15,7 @@ class ShoppingListsRepository {
     return this.db.manyOrNone(
       `SELECT sl.*,
         can_share,
-        user_name owner_name,
+        owner_user.user_name owner_name,
         users_for_list.users
           FROM users_shopping_lists usl
             LEFT JOIN shopping_lists sl ON sl.shopping_list_id=usl.shopping_list_id
@@ -32,6 +32,7 @@ class ShoppingListsRepository {
                       LEFT JOIN users us ON usl.user_id = us.user_id
               ) list_usr GROUP BY list_usr.shopping_list_id
             ) users_for_list ON users_for_list.shopping_list_id=usl.shopping_list_id
+            LEFT JOIN users owner_user ON sl.owner_id = owner_user.user_id
           WHERE us.user_id=$1`,
       [userId]
     );
