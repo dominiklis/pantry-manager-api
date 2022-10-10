@@ -16,7 +16,7 @@ class StoragesRepository {
     return this.db.manyOrNone(
       `SELECT st.*,
         can_share,
-        user_name owner_name,
+        owner_user.user_name owner_name,
         users_for_storage.users
           FROM users_storages ust
             LEFT JOIN storages st ON st.storage_id=ust.storage_id
@@ -33,6 +33,7 @@ class StoragesRepository {
                       LEFT JOIN users us ON ust.user_id = us.user_id
               ) stor_usr GROUP BY stor_usr.storage_id
             ) users_for_storage ON users_for_storage.storage_id=ust.storage_id
+            LEFT JOIN users owner_user ON st.owner_id = owner_user.user_id
           WHERE us.user_id=$1`,
       [userId]
     );
