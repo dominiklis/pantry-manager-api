@@ -96,9 +96,9 @@ const schemas = {
   }),
 
   "shopping list item": Joi.object({
+    shoppingListId: Joi.string().allow(null, "").guid(),
     shoppingListItemName: Joi.string().min(1).required(),
-    shoppingListId: Joi.string().guid().allow(null),
-    quantity: Joi.string().allow(null, ""),
+    amount: Joi.string().max(255).allow(null, ""),
     selected: Joi.boolean().allow(null),
   }),
 };

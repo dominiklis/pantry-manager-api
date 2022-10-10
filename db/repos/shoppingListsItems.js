@@ -23,39 +23,33 @@ class ShoppingListsItemsRepository {
     );
   }
 
-  async create(
-    userId,
-    shoppingListItemName,
-    quantity,
-    selected,
-    shoppingListId
-  ) {
+  async create(userId, shoppingListItemName, amount, selected, shoppingListId) {
     return this.db.oneOrNone(
       `INSERT INTO shopping_list_items(
-        owner_id, shopping_list_item_name, quantity, selected, shopping_list_id)
+        owner_id, shopping_list_item_name, amount, selected, shopping_list_id)
           VALUES($1, $2, $3, $4, $5) RETURNING *`,
-      [userId, shoppingListItemName, quantity, selected, shoppingListId]
+      [userId, shoppingListItemName, amount, selected, shoppingListId]
     );
   }
 
   async edit(
     shoppingListItemId,
     shoppingListItemName,
-    quantity,
+    amount,
     selected,
     shoppingListId
   ) {
     return this.db.oneOrNone(
       `UPDATE shopping_list_items SET
         shopping_list_item_name=$2,
-        quantity=$3,
+        amount=$3,
         selected=$4,
         shopping_list_id=$5
           WHERE shopping_list_item_id=$1 RETURNING *`,
       [
         shoppingListItemId,
         shoppingListItemName,
-        quantity,
+        amount,
         selected,
         shoppingListId,
       ]

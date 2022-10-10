@@ -14,7 +14,7 @@ const getShoppingListItems = async (userId) => {
 const createShoppingListItem = async (
   userId,
   shoppingListItemName,
-  quantity,
+  amount,
   selected,
   shoppingListId
 ) => {
@@ -31,7 +31,7 @@ const createShoppingListItem = async (
       const createdShoppingListItem = await t.shoppingListItems.create(
         userId,
         shoppingListItemName,
-        quantity,
+        amount,
         selected,
         shoppingListId
       );
@@ -52,7 +52,7 @@ const editShoppingListItem = async (
   userId,
   shoppingListItemId,
   shoppingListItemName,
-  quantity,
+  amount,
   selected,
   shoppingListId
 ) => {
@@ -77,7 +77,7 @@ const editShoppingListItem = async (
       const editedItem = await t.shoppingListItems.edit(
         shoppingListItemId,
         shoppingListItemName,
-        quantity,
+        amount,
         selected,
         shoppingListId
       );

@@ -21,7 +21,7 @@ const create = async (req, res, next) => {
   const { userId } = req.user;
   const {
     shoppingListItemName,
-    quantity,
+    amount,
     selected = false,
     shoppingListId,
   } = req.body;
@@ -30,7 +30,7 @@ const create = async (req, res, next) => {
     const result = await createShoppingListItem(
       userId,
       shoppingListItemName,
-      quantity,
+      amount,
       selected,
       shoppingListId
     );
@@ -44,14 +44,14 @@ const create = async (req, res, next) => {
 const edit = async (req, res, next) => {
   const { userId } = req.user;
   const { shoppingListItemId } = req.params;
-  const { shoppingListItemName, quantity, selected, shoppingListId } = req.body;
+  const { shoppingListItemName, amount, selected, shoppingListId } = req.body;
 
   try {
     const result = await editShoppingListItem(
       userId,
       shoppingListItemId,
       shoppingListItemName,
-      quantity,
+      amount,
       selected,
       shoppingListId
     );
