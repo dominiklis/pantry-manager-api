@@ -41,8 +41,10 @@ const registerUser = async (userName, email, password) => {
   try {
     const result = await db.task(async (t) => {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const { userId } = await db.users.create(userName, email, hashedPassword);
-      await db.settings.create(userId);
+      const { userId } = await t.users.create(userName, email, hashedPassword);
+      await t.settings.create(userId);
+      await t.storages.createDefault(userId);
+      await t.usersStorages.create(userId, userId, false);
 
       const token = createToken(userId, userName, email);
 

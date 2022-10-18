@@ -39,6 +39,15 @@ class StoragesRepository {
     );
   }
 
+  async createDefault(userId) {
+    return this.db.oneOrNone(
+      `INSERT INTO storages(
+        storage_id, owner_id, storage_name)
+          VALUES($1, $1, $2) RETURNING *`,
+      [userId, "deafult"]
+    );
+  }
+
   async create(userId, storageName, color, numberOfDaysForWarning) {
     return this.db.oneOrNone(
       `INSERT INTO storages(

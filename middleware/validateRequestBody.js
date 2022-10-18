@@ -9,7 +9,7 @@ const productObjectSchema = Joi.object({
   productName: Joi.string().min(1).required(),
   expirationDate: Joi.string().regex(datePattern).allow(null),
   amount: Joi.string().max(100).allow(null, ""),
-  storageId: Joi.string().guid().allow(null),
+  storageId: Joi.string().guid(),
   labels: Joi.array().items(Joi.string().guid()).allow(null),
 });
 

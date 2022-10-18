@@ -53,14 +53,14 @@ const createProduct = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
-      if (storageId) {
+      // check if the user has access to the storage
+      if (storageId !== userId) {
         const userRelation = await t.usersStorages.findById(userId, storageId);
-
         if (!userRelation) throw new BadRequest();
       }
 
+      // create product
       const createdProduct = await t.products.create(
-        userId,
         productName,
         expirationDate,
         amount,
@@ -68,6 +68,7 @@ const createProduct = async (
       );
       if (!createdProduct) throw new SomethingWentWrong();
 
+      // create relations with labels
       if (labels && labels.length) {
         labels = await createProductsLabelsRelations(
           t,
@@ -97,19 +98,26 @@ const editProduct = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
-      const productToEdit = await t.products.findById(userId, productId);
+      // find product
+      const productToEdit = await t.products.findById(productId);
       if (!productToEdit) throw new BadRequest();
 
-      if (productToEdit.ownerId !== userId) {
-        if (productToEdit.storageId) {
-          const userRelation = await t.usersStorages.findById(
-            userId,
-            productToEdit.storageId
-          );
-          if (!userRelation) throw new BadRequest();
-        } else throw new BadRequest();
+      // check that product is in storage that the user has access to
+      if (productToEdit.storageId !== userId) {
+        const userRelation = await t.usersStorages.findById(
+          userId,
+          productToEdit.storageId
+        );
+        if (!userRelation) throw new BadRequest();
       }
 
+      // if product is moved from one storage to another, check that user has access to this second storage
+      if (productToEdit.storageId !== storageId) {
+        const userRelation = await t.usersStorages.findById(userId, storageId);
+        if (!userRelation) throw new BadRequest();
+      }
+
+      // edit the product
       const editedProduct = await t.products.edit(
         productId,
         productName,
@@ -119,6 +127,7 @@ const editProduct = async (
       );
       if (!editedProduct) throw new SomethingWentWrong();
 
+      // remove existing relations with labels and create new
       await removeProductsLabelsRelations(t, userId, productId);
 
       if (labels && labels.length) {
@@ -142,19 +151,18 @@ const editProduct = async (
 const removeProduct = async (userId, productId) => {
   try {
     const result = await db.task(async (t) => {
-      const productToRemove = await t.products.findById(userId, productId);
+      // find product
+      const productToRemove = await t.products.findById(productId);
       if (!productToRemove) throw new BadRequest();
 
-      if (productToRemove.ownerId !== userId) {
-        if (productToRemove.storageId) {
-          const userRelation = await t.usersStorages.findById(
-            userId,
-            productToRemove.storageId
-          );
-          if (!userRelation) throw new BadRequest();
-        } else throw new BadRequest();
-      }
+      // check that user has access to the storage in which this product is
+      const userRelation = await t.usersStorages.findById(
+        userId,
+        productToRemove.storageId
+      );
+      if (!userRelation) throw new BadRequest();
 
+      // remove product
       const removedProduct = await t.products.remove(productId);
       if (!removedProduct) throw new SomethingWentWrong();
 
