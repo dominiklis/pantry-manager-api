@@ -53,6 +53,7 @@ const registerUser = async (userName, email, password) => {
         userName,
         email,
         token,
+        defaultStorageId: userId,
       };
     });
 
@@ -115,6 +116,7 @@ const updateUser = async (
         userName: updatedUser.userName,
         email: updatedUser.email,
         token,
+        defaultStorageId: userId,
       };
     });
 
@@ -153,6 +155,7 @@ const renewToken = async (userId, userName, email) => {
       userName,
       email,
       token,
+      defaultStorageId: userId,
       storages,
       products,
       labels,

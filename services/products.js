@@ -20,8 +20,6 @@ const createProductsLabelsRelations = async (
         if (insertingResult) result.push(labelId);
       }
     } catch (error) {
-      console.log(error);
-
       continue;
     }
   }
@@ -45,6 +43,7 @@ const getProducts = async (userId) => {
 
 const createProduct = async (
   userId,
+  defaultStorageId,
   productName,
   expirationDate,
   amount,
@@ -54,7 +53,7 @@ const createProduct = async (
   try {
     const result = await db.task(async (t) => {
       // check if the user has access to the storage
-      if (storageId !== userId) {
+      if (storageId !== defaultStorageId) {
         const userRelation = await t.usersStorages.findById(userId, storageId);
         if (!userRelation) throw new BadRequest();
       }
@@ -89,6 +88,7 @@ const createProduct = async (
 
 const editProduct = async (
   userId,
+  defaultStorageId,
   productId,
   productName,
   expirationDate,
@@ -103,7 +103,7 @@ const editProduct = async (
       if (!productToEdit) throw new BadRequest();
 
       // check that product is in storage that the user has access to
-      if (productToEdit.storageId !== userId) {
+      if (productToEdit.storageId !== defaultStorageId) {
         const userRelation = await t.usersStorages.findById(
           userId,
           productToEdit.storageId
@@ -148,7 +148,7 @@ const editProduct = async (
   }
 };
 
-const removeProduct = async (userId, productId) => {
+const removeProduct = async (userId, defaultStorageId, productId) => {
   try {
     const result = await db.task(async (t) => {
       // find product
@@ -156,11 +156,13 @@ const removeProduct = async (userId, productId) => {
       if (!productToRemove) throw new BadRequest();
 
       // check that user has access to the storage in which this product is
-      const userRelation = await t.usersStorages.findById(
-        userId,
-        productToRemove.storageId
-      );
-      if (!userRelation) throw new BadRequest();
+      if (productToRemove.storageId !== defaultStorageId) {
+        const userRelation = await t.usersStorages.findById(
+          userId,
+          productToRemove.storageId
+        );
+        if (!userRelation) throw new BadRequest();
+      }
 
       // remove product
       const removedProduct = await t.products.remove(productId);

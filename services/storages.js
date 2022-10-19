@@ -88,7 +88,12 @@ const editStorage = async (
   }
 };
 
-const removeStorage = async (userId, storageId, deleteProducts) => {
+const removeStorage = async (
+  userId,
+  defaultStorageId,
+  storageId,
+  deleteProducts
+) => {
   try {
     const result = await db.task(async (t) => {
       const storageToRemove = await t.storages.findById(storageId);
@@ -97,8 +102,11 @@ const removeStorage = async (userId, storageId, deleteProducts) => {
 
       if (storageToRemove.ownerId !== userId) throw new Forbidden();
 
-      if (deleteProducts === "true")
+      if (deleteProducts === "true") {
         await db.products.removeProductsInStorage(storageId);
+      } else {
+        await db.products.swapStorage(storageId, defaultStorageId);
+      }
 
       const removedStorage = await t.storages.remove(storageId);
       if (!removedStorage) throw new SomethingWentWrong();

@@ -18,12 +18,13 @@ const get = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultStorageId } = req.user;
   const { productName, expirationDate, amount, storageId, labels } = req.body;
 
   try {
     const result = await createProduct(
       userId,
+      defaultStorageId,
       productName,
       expirationDate,
       amount,
@@ -38,13 +39,14 @@ const create = async (req, res, next) => {
 };
 
 const edit = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultStorageId } = req.user;
   const { productId } = req.params;
   const { productName, expirationDate, amount, storageId, labels } = req.body;
 
   try {
     const result = await editProduct(
       userId,
+      defaultStorageId,
       productId,
       productName,
       expirationDate,
@@ -60,12 +62,11 @@ const edit = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultStorageId } = req.user;
   const { productId } = req.params;
-  const { deleteProducts } = req.query;
 
   try {
-    const result = await removeProduct(userId, productId, deleteProducts);
+    const result = await removeProduct(userId, defaultStorageId, productId);
 
     return res.status(200).json(result);
   } catch (error) {

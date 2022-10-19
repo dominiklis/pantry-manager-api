@@ -6,9 +6,13 @@ const createToken = (userId, userName, email) => {
   const expiresIn = process.env.JWT_LIFETIME;
   if (!secret || !expiresIn) throw new SomethingWentWrong();
 
-  return jwt.sign({ userId, userName, email }, secret, {
-    expiresIn,
-  });
+  return jwt.sign(
+    { userId, userName, email, defaultStorageId: userId },
+    secret,
+    {
+      expiresIn,
+    }
+  );
 };
 
 module.exports = createToken;

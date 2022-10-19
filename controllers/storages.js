@@ -57,12 +57,17 @@ const edit = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultStorageId } = req.user;
   const { storageId } = req.params;
   const { deleteProducts } = req.query;
 
   try {
-    const result = await removeStorage(userId, storageId, deleteProducts);
+    const result = await removeStorage(
+      userId,
+      defaultStorageId,
+      storageId,
+      deleteProducts
+    );
 
     res.status(200).json(result);
   } catch (error) {

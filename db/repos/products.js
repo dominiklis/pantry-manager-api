@@ -59,6 +59,13 @@ class ProductsRepository {
       storageId,
     ]);
   }
+
+  async swapStorage(from, to) {
+    return this.db.none(
+      `UPDATE products SET storage_id=$2 WHERE storage_id=$1`,
+      [from, to]
+    );
+  }
 }
 
 module.exports = ProductsRepository;
