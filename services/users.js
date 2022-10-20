@@ -28,6 +28,7 @@ const loginUser = async (userName, email, password) => {
         userName: user.userName,
         email: user.email,
         token,
+        defaultStorageId: user.userId,
       };
     });
 
