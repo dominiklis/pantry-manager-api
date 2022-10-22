@@ -7,7 +7,13 @@ const createToken = (userId, userName, email) => {
   if (!secret || !expiresIn) throw new SomethingWentWrong();
 
   return jwt.sign(
-    { userId, userName, email, defaultStorageId: userId },
+    {
+      userId,
+      userName,
+      email,
+      defaultStorageId: userId,
+      defaultShoppingListId: userId,
+    },
     secret,
     {
       expiresIn,

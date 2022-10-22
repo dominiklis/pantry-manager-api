@@ -13,6 +13,7 @@ const getShoppingListItems = async (userId) => {
 
 const createShoppingListItem = async (
   userId,
+  defaultShoppingListId,
   shoppingListItemName,
   amount,
   selected,
@@ -20,24 +21,27 @@ const createShoppingListItem = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
-      if (shoppingListId) {
+      // check if the user has access to the list
+      if (shoppingListId !== defaultShoppingListId) {
         const userRelation = await t.usersShoppingLists.findById(
           userId,
           shoppingListId
         );
+
         if (!userRelation) throw new BadRequest();
       }
 
-      const createdShoppingListItem = await t.shoppingListItems.create(
-        userId,
+      // create item
+      const createdItem = await t.shoppingListItems.create(
         shoppingListItemName,
         amount,
         selected,
         shoppingListId
       );
-      if (!createdShoppingListItem) throw new SomethingWentWrong();
 
-      return createdShoppingListItem;
+      if (!createdItem) throw new SomethingWentWrong();
+
+      return createdItem;
     });
 
     return result;
@@ -50,6 +54,7 @@ const createShoppingListItem = async (
 
 const editShoppingListItem = async (
   userId,
+  defaultShoppingListId,
   shoppingListItemId,
   shoppingListItemName,
   amount,
@@ -58,22 +63,34 @@ const editShoppingListItem = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
-      const itemToEdit = await t.shoppingListItems.findById(
-        userId,
-        shoppingListItemId
-      );
+      // find item to edit
+      const itemToEdit = await t.shoppingListItems.findById(shoppingListItemId);
       if (!itemToEdit) throw new BadRequest();
 
-      if (itemToEdit.ownerId !== userId) {
-        if (itemToEdit.shoppingListId) {
-          const userRelation = await t.usersShoppingLists.findById(
-            userId,
-            itemToEdit.shoppingListId
-          );
-          if (!userRelation) throw new BadRequest();
-        } else throw new BadRequest();
+      // check that item is on list that user has access to
+      if (itemToEdit.shoppingListId !== defaultShoppingListId) {
+        const userRelation = await t.usersShoppingLists.findById(
+          userId,
+          itemToEdit.shoppingListId
+        );
+
+        if (!userRelation) throw new BadRequest();
       }
 
+      // if item is moved from one list to another, check that user has access to this second list
+      if (
+        itemToEdit.shoppingListId !== shoppingListId &&
+        itemToEdit.shoppingListId !== defaultShoppingListId
+      ) {
+        const userRelation = await t.usersShoppingLists.findById(
+          userId,
+          shoppingListId
+        );
+
+        if (!userRelation) throw new BadRequest();
+      }
+
+      // edit item
       const editedItem = await t.shoppingListItems.edit(
         shoppingListItemId,
         shoppingListItemName,
@@ -92,25 +109,30 @@ const editShoppingListItem = async (
   }
 };
 
-const removeShoppingListItem = async (userId, shoppingListItemId) => {
+const removeShoppingListItem = async (
+  userId,
+  defaultShoppingListId,
+  shoppingListItemId
+) => {
   try {
     const result = await db.task(async (t) => {
+      // find item
       const itemToRemove = await t.shoppingListItems.findById(
-        userId,
         shoppingListItemId
       );
       if (!itemToRemove) throw new BadRequest();
 
-      if (itemToRemove.ownerId !== userId) {
-        if (itemToRemove.shoppingListId) {
-          const userRelation = await t.usersShoppingLists.findById(
-            userId,
-            itemToRemove.shoppingListId
-          );
-          if (!userRelation) throw new BadRequest();
-        } else throw new BadRequest();
+      // check that user has access to the list on which this item is
+      if (itemToRemove.shoppingListId !== defaultShoppingListId) {
+        const userRelation = await t.usersShoppingLists.findById(
+          userId,
+          itemToRemove.shoppingListId
+        );
+
+        if (!userRelation) throw new BadRequest();
       }
 
+      // remove item
       const removedItem = await t.shoppingListItems.remove(shoppingListItemId);
       if (!removedItem) throw new SomethingWentWrong();
 

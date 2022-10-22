@@ -4,31 +4,29 @@ class ShoppingListsItemsRepository {
     this.pgp = pgp;
   }
 
-  async findById(userId, shoppingListItemId) {
+  async findById(shoppingListItemId) {
     return this.db.oneOrNone(
-      `SELECT DISTINCT spli.* FROM shopping_list_items spli
-        LEFT JOIN users_shopping_lists uspl ON uspl.shopping_list_id=spli.shopping_list_id
-          WHERE spli.shopping_list_item_id=$2 AND (spli.owner_id=$1 OR uspl.user_id=$1)`,
-      [userId, shoppingListItemId]
+      `SELECT * FROM  shopping_list_items WHERE shopping_list_item_id=$1;`,
+      [shoppingListItemId]
     );
   }
 
   async get(userId) {
     return this.db.manyOrNone(
-      `SELECT DISTINCT spli.* FROM shopping_list_items spli
-        LEFT JOIN users_shopping_lists uspl 
-            ON uspl.shopping_list_id=spli.shopping_list_id
-        WHERE spli.owner_id=$1 OR uspl.user_id=$1;`,
+      `SELECT shopping_list_items.* FROM users_shopping_lists
+        LEFT JOIN shopping_lists ON shopping_lists.shopping_list_id=users_shopping_lists.shopping_list_id
+        LEFT JOIN shopping_list_items ON shopping_list_items.shopping_list_id=shopping_lists.shopping_list_id
+      WHERE users_shopping_lists.user_id=$1;`,
       [userId]
     );
   }
 
-  async create(userId, shoppingListItemName, amount, selected, shoppingListId) {
+  async create(shoppingListItemName, amount, selected, shoppingListId) {
     return this.db.oneOrNone(
       `INSERT INTO shopping_list_items(
-        owner_id, shopping_list_item_name, amount, selected, shopping_list_id)
-          VALUES($1, $2, $3, $4, $5) RETURNING *`,
-      [userId, shoppingListItemName, amount, selected, shoppingListId]
+        shopping_list_item_name, amount, selected, shopping_list_id)
+          VALUES($1, $2, $3, $4) RETURNING *`,
+      [shoppingListItemName, amount, selected, shoppingListId]
     );
   }
 

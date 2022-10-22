@@ -4,10 +4,11 @@ class ShoppingListsRepository {
     this.pgp = pgp;
   }
 
-  async findById(shoppingListId) {
+  async findById(userId, shoppingListId) {
     return this.db.oneOrNone(
-      `SELECT * FROM shopping_lists WHERE shopping_list_id=$1`,
-      [shoppingListId]
+      `SELECT * FROM shopping_lists 
+        WHERE owner_id=$1 AND shopping_list_id=$2`,
+      [userId, shoppingListId]
     );
   }
 
@@ -35,6 +36,15 @@ class ShoppingListsRepository {
             LEFT JOIN users owner_user ON sl.owner_id = owner_user.user_id
           WHERE us.user_id=$1`,
       [userId]
+    );
+  }
+
+  async createDefault(userId) {
+    return this.db.oneOrNone(
+      `INSERT INTO shopping_lists(
+        shopping_list_id, owner_id, shopping_list_name)
+          VALUES($1, $1, $2) RETURNING *`,
+      [userId, "deafult"]
     );
   }
 

@@ -42,11 +42,14 @@ const createShoppingList = async (userId, shoppingListName, userName) => {
 const editShoppingList = async (userId, shoppingListId, shoppingListName) => {
   try {
     const result = await db.task(async (t) => {
-      const listToEdit = await db.shoppingLists.findById(shoppingListId);
+      const listToEdit = await t.shoppingLists.findById(shoppingListId);
       if (!listToEdit) throw new BadRequest(constants.errorsMessages.notFound);
 
       if (listToEdit.ownerId !== userId) {
-        const relation = await t.shoppingLists.findById(userId, shoppingListId);
+        const relation = await t.usersShoppingLists.findById(
+          userId,
+          shoppingListId
+        );
 
         if (!relation) throw new Forbidden();
       }
@@ -69,7 +72,7 @@ const editShoppingList = async (userId, shoppingListId, shoppingListName) => {
 const removeShoppingList = async (userId, shoppingListId, deleteItems) => {
   try {
     const result = await db.task(async (t) => {
-      const listToRemove = await db.shoppingLists.findById(shoppingListId);
+      const listToRemove = await t.shoppingLists.findById(shoppingListId);
       if (!listToRemove)
         throw new BadRequest(constants.errorsMessages.notFound);
 

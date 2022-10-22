@@ -96,7 +96,7 @@ const schemas = {
   }),
 
   "shopping list item": Joi.object({
-    shoppingListId: Joi.string().allow(null, "").guid(),
+    shoppingListId: Joi.string().guid(),
     shoppingListItemName: Joi.string().min(1).required(),
     amount: Joi.string().max(255).allow(null, ""),
     selected: Joi.boolean().allow(null),

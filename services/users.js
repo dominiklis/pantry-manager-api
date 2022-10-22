@@ -29,6 +29,7 @@ const loginUser = async (userName, email, password) => {
         email: user.email,
         token,
         defaultStorageId: user.userId,
+        defaultShoppingListId: user.userId,
       };
     });
 
@@ -46,6 +47,8 @@ const registerUser = async (userName, email, password) => {
       await t.settings.create(userId);
       await t.storages.createDefault(userId);
       await t.usersStorages.create(userId, userId, false);
+      await t.shoppingLists.createDefault(userId);
+      await t.usersShoppingLists.create(userId, userId, false);
 
       const token = createToken(userId, userName, email);
 
@@ -55,6 +58,7 @@ const registerUser = async (userName, email, password) => {
         email,
         token,
         defaultStorageId: userId,
+        defaultShoppingListId: userId,
       };
     });
 
@@ -118,6 +122,7 @@ const updateUser = async (
         email: updatedUser.email,
         token,
         defaultStorageId: userId,
+        defaultShoppingListId: userId,
       };
     });
 
@@ -157,6 +162,7 @@ const renewToken = async (userId, userName, email) => {
       email,
       token,
       defaultStorageId: userId,
+      defaultShoppingListId: userId,
       storages,
       products,
       labels,

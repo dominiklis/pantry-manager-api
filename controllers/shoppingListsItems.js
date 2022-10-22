@@ -18,7 +18,7 @@ const get = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultShoppingListId } = req.user;
   const {
     shoppingListItemName,
     amount,
@@ -29,6 +29,7 @@ const create = async (req, res, next) => {
   try {
     const result = await createShoppingListItem(
       userId,
+      defaultShoppingListId,
       shoppingListItemName,
       amount,
       selected,
@@ -42,13 +43,14 @@ const create = async (req, res, next) => {
 };
 
 const edit = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultShoppingListId } = req.user;
   const { shoppingListItemId } = req.params;
   const { shoppingListItemName, amount, selected, shoppingListId } = req.body;
 
   try {
     const result = await editShoppingListItem(
       userId,
+      defaultShoppingListId,
       shoppingListItemId,
       shoppingListItemName,
       amount,
@@ -63,11 +65,15 @@ const edit = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultShoppingListId } = req.user;
   const { shoppingListItemId } = req.params;
 
   try {
-    const result = await removeShoppingListItem(userId, shoppingListItemId);
+    const result = await removeShoppingListItem(
+      userId,
+      defaultShoppingListId,
+      shoppingListItemId
+    );
 
     return res.status(200).json(result);
   } catch (error) {
