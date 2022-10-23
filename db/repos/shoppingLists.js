@@ -4,11 +4,11 @@ class ShoppingListsRepository {
     this.pgp = pgp;
   }
 
-  async findById(userId, shoppingListId) {
+  async findById(shoppingListId) {
     return this.db.oneOrNone(
       `SELECT * FROM shopping_lists 
-        WHERE owner_id=$1 AND shopping_list_id=$2`,
-      [userId, shoppingListId]
+        WHERE shopping_list_id=$1`,
+      [shoppingListId]
     );
   }
 
