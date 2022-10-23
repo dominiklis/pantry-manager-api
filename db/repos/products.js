@@ -13,8 +13,7 @@ class ProductsRepository {
   async get(userId) {
     return this.db.manyOrNone(
       `SELECT products.*, selected_labels.labels FROM users_storages
-        LEFT JOIN storages ON users_storages.storage_id=storages.storage_id
-        LEFT JOIN products ON storages.storage_id=products.storage_id
+        LEFT JOIN products ON users_storages.storage_id=products.storage_id
         LEFT JOIN (
           SELECT labels_for_this_product.product_id, ARRAY_AGG(labels_for_this_product.label_id) labels FROM (
             SELECT labels.label_id, products_labels.product_id FROM labels
@@ -22,7 +21,7 @@ class ProductsRepository {
             WHERE labels.owner_id=$1
           ) AS labels_for_this_product GROUP BY labels_for_this_product.product_id
         ) AS selected_labels ON products.product_id=selected_labels.product_id
-      WHERE users_storages.user_id=$1;`,
+      WHERE users_storages.user_id=$1 AND products.product_id IS NOT NULL;`,
       [userId]
     );
   }
