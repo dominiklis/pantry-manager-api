@@ -14,9 +14,8 @@ class ShoppingListsItemsRepository {
   async get(userId) {
     return this.db.manyOrNone(
       `SELECT shopping_list_items.* FROM users_shopping_lists
-        LEFT JOIN shopping_lists ON shopping_lists.shopping_list_id=users_shopping_lists.shopping_list_id
-        LEFT JOIN shopping_list_items ON shopping_list_items.shopping_list_id=shopping_lists.shopping_list_id
-      WHERE users_shopping_lists.user_id=$1;`,
+        LEFT JOIN shopping_list_items ON shopping_list_items.shopping_list_id=users_shopping_lists.shopping_list_id
+      WHERE users_shopping_lists.user_id=$1 AND shopping_list_items.shopping_list_item_id IS NOT NULL;`,
       [userId]
     );
   }
