@@ -1,5 +1,5 @@
 const { db } = require("../db");
-const { SomethingWentWrong, BadRequest } = require("../errors");
+const { SomethingWentWrong, BadRequest, Forbidden } = require("../errors");
 
 const getShoppingLists = async (userId) => {
   try {
@@ -69,17 +69,30 @@ const editShoppingList = async (userId, shoppingListId, shoppingListName) => {
   }
 };
 
-const removeShoppingList = async (userId, shoppingListId, deleteItems) => {
+const removeShoppingList = async (
+  userId,
+  defaultShoppingListId,
+  shoppingListId,
+  deleteItems
+) => {
   try {
     const result = await db.task(async (t) => {
+      if (shoppingListId === defaultShoppingListId) throw new Forbidden();
+
       const listToRemove = await t.shoppingLists.findById(shoppingListId);
       if (!listToRemove)
         throw new BadRequest(constants.errorsMessages.notFound);
 
       if (listToRemove.ownerId !== userId) throw new Forbidden();
 
-      if (deleteItems === "true")
+      if (deleteItems === "true") {
         await db.shoppingListItems.removeItemsOnList(shoppingListId);
+      } else {
+        await db.shoppingListItems.swapList(
+          shoppingListId,
+          defaultShoppingListId
+        );
+      }
 
       const removedList = await t.shoppingLists.remove(shoppingListId);
       if (!removedList) throw new SomethingWentWrong();

@@ -49,13 +49,14 @@ const edit = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, defaultShoppingListId } = req.user;
   const { shoppingListId } = req.params;
   const { deleteItems } = req.query;
 
   try {
     const result = await removeShoppingList(
       userId,
+      defaultShoppingListId,
       shoppingListId,
       deleteItems
     );
