@@ -67,6 +67,13 @@ class ShoppingListsItemsRepository {
       [shoppingListId]
     );
   }
+
+  async swapList(from, to) {
+    return this.db.none(
+      `UPDATE shopping_list_items SET shopping_list_id=$2 WHERE shopping_list_id=$1`,
+      [from, to]
+    );
+  }
 }
 
 module.exports = ShoppingListsItemsRepository;
