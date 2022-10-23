@@ -96,6 +96,8 @@ const removeStorage = async (
 ) => {
   try {
     const result = await db.task(async (t) => {
+      if (storageId === defaultStorageId) throw new Forbidden();
+
       const storageToRemove = await t.storages.findById(storageId);
       if (!storageToRemove)
         throw new BadRequest(constants.errorsMessages.notFound);
