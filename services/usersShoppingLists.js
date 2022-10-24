@@ -17,7 +17,10 @@ const getUsersShoppingLists = async (userId, shoppingListId) => {
       return relations;
     });
 
-    return result;
+    return {
+      shoppingListId,
+      users: result,
+    };
   } catch (error) {
     throw error;
   }

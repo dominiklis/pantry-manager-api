@@ -18,7 +18,10 @@ const getUsersStorages = async (userId, storageId) => {
       return relations;
     });
 
-    return result;
+    return {
+      storageId,
+      users: result,
+    };
   } catch (error) {
     throw error;
   }
