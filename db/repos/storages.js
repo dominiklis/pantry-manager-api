@@ -4,11 +4,11 @@ class StoragesRepository {
     this.pgp = pgp;
   }
 
-  async findById(userId, storageId) {
+  async findById(storageId) {
     return this.db.oneOrNone(
       `SELECT * FROM storages
-        WHERE owner_id=$1 AND storage_id=$2`,
-      [userId, storageId]
+        WHERE storage_id=$1`,
+      [storageId]
     );
   }
 
