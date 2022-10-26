@@ -1,14 +1,18 @@
 const { db } = require("../db");
 const { SomethingWentWrong, BadRequest } = require("../errors");
 
-const createCollectionOfProducts = async (userId, products) => {
+const createCollectionOfProducts = async (
+  userId,
+  defaultStorageId,
+  products
+) => {
   try {
     const result = await db.task(async (t) => {
       if (!products || !products.length) return [];
 
       const createdProducts = [];
 
-      if (products[0].storageId) {
+      if (products[0].storageId !== defaultStorageId) {
         const userRelation = await t.usersStorages.findById(
           userId,
           products[0].storageId
@@ -22,7 +26,6 @@ const createCollectionOfProducts = async (userId, products) => {
           products[index];
 
         const createdProduct = await t.products.create(
-          userId,
           productName,
           expirationDate,
           amount,
