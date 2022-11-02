@@ -27,6 +27,18 @@ class SettingsRepository {
       [settingsId, defaultNumberOfDaysForWarning, language, theme]
     );
   }
+
+  async getLanguages() {
+    return this.db.manyOrNone(`SELECT unnest(enum_range(NULL::languages));`);
+  }
+
+  async getThemes() {
+    return this.db.manyOrNone(`SELECT unnest(enum_range(NULL::themes));`);
+  }
+
+  async getColors() {
+    return this.db.manyOrNone(`SELECT unnest(enum_range(NULL::colors));`);
+  }
 }
 
 module.exports = SettingsRepository;

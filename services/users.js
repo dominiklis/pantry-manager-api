@@ -28,8 +28,6 @@ const loginUser = async (userName, email, password) => {
         userName: user.userName,
         email: user.email,
         token,
-        defaultStorageId: user.userId,
-        defaultShoppingListId: user.userId,
       };
     });
 
@@ -57,8 +55,6 @@ const registerUser = async (userName, email, password) => {
         userName,
         email,
         token,
-        defaultStorageId: userId,
-        defaultShoppingListId: userId,
       };
     });
 
@@ -121,8 +117,6 @@ const updateUser = async (
         userName: updatedUser.userName,
         email: updatedUser.email,
         token,
-        defaultStorageId: userId,
-        defaultShoppingListId: userId,
       };
     });
 
@@ -150,24 +144,11 @@ const renewToken = async (userId, userName, email) => {
 
     const token = createToken(userId, userName, email);
 
-    const storages = await t.storages.get(user.userId);
-    const products = await t.products.get(user.userId);
-    const labels = await t.labels.get(user.userId);
-    const shoppingLists = await t.shoppingLists.get(user.userId);
-    const shoppingListItems = await t.shoppingListItems.get(user.userId);
-
     return {
       userId,
       userName,
       email,
       token,
-      defaultStorageId: userId,
-      defaultShoppingListId: userId,
-      storages,
-      products,
-      labels,
-      shoppingLists,
-      shoppingListItems,
     };
   });
 
