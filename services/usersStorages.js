@@ -5,7 +5,7 @@ const {
   Forbidden,
   Duplicate,
 } = require("../errors");
-const constants = require("../utils/constants");
+const { constants } = require("../utils");
 
 const getUsersStorages = async (userId, storageId) => {
   try {
