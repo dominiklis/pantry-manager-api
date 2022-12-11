@@ -8,13 +8,7 @@ const loginUser = async (userName, email, password) => {
     const result = await db.task(async (t) => {
       const user = await t.users.findByUserNameOrEmail(userName, email);
 
-      if (
-        !user ||
-        !user.userId ||
-        !user.userName ||
-        !user.email ||
-        !user.password
-      )
+      if (!user || !user.userId)
         throw new BadRequest(constants.errorsMessages.invalid);
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
